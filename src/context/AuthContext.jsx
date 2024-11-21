@@ -35,8 +35,8 @@ const AuthProvider = ({ children }) => {
           visible={true}
           height="100"
           width="100"
-          color="blue"
-          secondaryColor="blue"
+          color="#316bf3"
+          secondaryColor="#316bf3"
           radius="12.5"
           ariaLabel="mutating-dots-loading"
           wrapperStyle={{}}
