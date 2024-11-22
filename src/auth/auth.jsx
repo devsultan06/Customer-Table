@@ -7,12 +7,15 @@ import ClipLoader from "react-spinners/ClipLoader";
 import { signInWithEmailAndPassword } from "firebase/auth";
 import { auth } from "../firebase/config"; // Adjust the path as necessary
 import { useNavigate } from "react-router-dom";
-import MessageBox from "../components/MessageBox"; // Import the new component
+import MessageBox from "./MessageBox";
+import Theme from "../components/Theme";
+import useThemeMode from "../hooks/useThemeMode";
 
 const Auth = () => {
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState({ type: "", text: "" });
   const navigate = useNavigate();
+  const { theme } = useThemeMode();
 
   const formik = useFormik({
     initialValues: {
@@ -57,9 +60,17 @@ const Auth = () => {
   });
 
   return (
-    <div className="auth flex flex-col items-center justify-center h-screen">
+    <div
+      className={`auth flex flex-col items-center justify-center h-screen transition-colors duration-300 ${
+        theme === "dark"
+          ? "dark:bg-gray-800 dark:text-white"
+          : "bg-white text-black"
+      }`}
+    >
+      {" "}
       <h1 className="text-3xl font-bold underline mb-4">Login</h1>
       <MessageBox type={message.type} text={message.text} />
+      <Theme />
       <form
         className="flex flex-col gap-4 w-[300px] mt-[20px]"
         onSubmit={formik.handleSubmit}

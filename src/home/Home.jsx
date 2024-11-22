@@ -20,6 +20,10 @@ import {
   TextField,
   Button,
   Modal,
+  Select,
+  FormControl,
+  InputLabel,
+  MenuItem,
 } from "@mui/material";
 import { alpha } from "@mui/material/styles";
 import AddIcon from "@mui/icons-material/Add";
@@ -115,6 +119,13 @@ export default function Home() {
     balance: "",
     deposit: "",
   });
+
+  const statusColors = {
+    Open: { backgroundColor: "#F0F1FA", textColor: "#4F5AED" }, // Open - Slightly darker green for text
+    Inactive: { backgroundColor: "#E9EDF5", textColor: "#5A6376" }, // Inactive - Neutral gray tones
+    Due: { backgroundColor: "#FAF0F3", textColor: "#D12953" }, // Due - Darker orange for text
+    Paid: { backgroundColor: "#E1FCEF", textColor: "#14804A" }, // Paid - Deep blue for text
+  };
 
   // Check if all fields are filled
   const isFormValid = useMemo(() => {
@@ -277,12 +288,44 @@ export default function Home() {
                       <TableCell padding="checkbox">
                         <Checkbox color="primary" />
                       </TableCell>
-                      <TableCell>{customer.name}</TableCell>
+                      <TableCell>
+                        <h1>{customer.name}</h1>
+                        <p style={{ fontSize: "0.8rem" }}>{customer.id}</p>{" "}
+                        {/* Smaller paragraph */}
+                      </TableCell>
                       <TableCell>{customer.description}</TableCell>
-                      <TableCell>{customer.status}</TableCell>
-                      <TableCell>{customer.rate}</TableCell>
-                      <TableCell>{customer.balance}</TableCell>
-                      <TableCell>{customer.deposit}</TableCell>
+                      <TableCell>
+                        <Button
+                          variant="contained"
+                          sx={{
+                            pointerEvents: "none",
+                            cursor: "default",
+                            backgroundColor:
+                              statusColors[customer.status]?.backgroundColor ||
+                              "default",
+                            color:
+                              statusColors[customer.status]?.textColor ||
+                              "#000",
+                          }}
+                        >
+                          {customer.status}
+                        </Button>{" "}
+                      </TableCell>
+                      <TableCell>
+                        <h1>${customer.rate}</h1>
+                        <p style={{ fontSize: "0.8rem" }}>CAD</p>{" "}
+                        {/* Smaller paragraph */}
+                      </TableCell>{" "}
+                      <TableCell>
+                        <h1>${customer.balance}</h1>
+                        <p style={{ fontSize: "0.8rem" }}>CAD</p>{" "}
+                        {/* Smaller paragraph */}
+                      </TableCell>{" "}
+                      <TableCell>
+                        <h1>${customer.deposit}</h1>
+                        <p style={{ fontSize: "0.8rem" }}>CAD</p>{" "}
+                        {/* Smaller paragraph */}
+                      </TableCell>{" "}
                     </TableRow>
                   ))
               )}
@@ -348,14 +391,21 @@ export default function Home() {
             fullWidth
             sx={{ mb: 2 }}
           />
-          <TextField
-            label="Status"
-            name="status"
-            value={newCustomer.status}
-            onChange={handleInputChange}
-            fullWidth
-            sx={{ mb: 2 }}
-          />
+          <FormControl fullWidth sx={{ mb: 2 }}>
+            <InputLabel>Status</InputLabel>
+            <Select
+              label="Status"
+              name="status"
+              value={newCustomer.status}
+              onChange={handleInputChange}
+            >
+              <MenuItem value="Open">Open</MenuItem>
+              <MenuItem value="Inactive">Inactive</MenuItem>
+              <MenuItem value="Due">Due</MenuItem> {/* Changed value */}
+              <MenuItem value="Paid">Paid</MenuItem> {/* Changed value */}
+            </Select>
+          </FormControl>
+
           <TextField
             label="Rate"
             name="rate"
