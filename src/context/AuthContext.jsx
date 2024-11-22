@@ -1,7 +1,7 @@
 import React, { createContext, useContext, useState, useEffect } from "react";
 import { onAuthStateChanged } from "firebase/auth";
 import { auth } from "../firebase/config"; // Adjust the path as necessary
-import { MutatingDots } from "react-loader-spinner";
+import { ColorRing } from "react-loader-spinner";
 
 // Create a context
 const AuthContext = createContext();
@@ -16,7 +16,6 @@ const AuthProvider = ({ children }) => {
       if (user) {
         setCurrentUser({
           email: user.email,
-          password: user.password, // Note: Firebase Auth does not provide the password
         });
       } else {
         setCurrentUser(null);
@@ -31,16 +30,14 @@ const AuthProvider = ({ children }) => {
   if (loading) {
     return (
       <div className="fixed inset-0 z-50 flex items-center justify-center bg-black06">
-        <MutatingDots
+        <ColorRing
           visible={true}
-          height="100"
-          width="100"
-          color="#316bf3"
-          secondaryColor="#316bf3"
-          radius="12.5"
-          ariaLabel="mutating-dots-loading"
+          height="80"
+          width="80"
+          ariaLabel="color-ring-loading"
           wrapperStyle={{}}
-          wrapperClass=""
+          wrapperClass="color-ring-wrapper"
+          colors={["#316bf3", "#316bf3", "#316bf3", "#316bf3", "#316bf3"]}
         />
       </div>
     );
