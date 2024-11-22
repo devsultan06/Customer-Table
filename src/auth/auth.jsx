@@ -3,16 +3,17 @@ import { useFormik } from "formik";
 import * as Yup from "yup";
 import TextField from "@mui/material/TextField";
 import Button from "@mui/material/Button";
-import Alert from "@mui/material/Alert";
+import ClipLoader from "react-spinners/ClipLoader";
 import { signInWithEmailAndPassword } from "firebase/auth";
 import { auth } from "../firebase/config"; // Adjust the path as necessary
-import ClipLoader from "react-spinners/ClipLoader";
 import { useNavigate } from "react-router-dom";
+import MessageBox from "../components/MessageBox"; // Import the new component
+
 const Auth = () => {
   const [loading, setLoading] = useState(false);
-  const [error, setError] = useState("");
-  const [success, setSuccess] = useState("");
+  const [message, setMessage] = useState({ type: "", text: "" });
   const navigate = useNavigate();
+
   const formik = useFormik({
     initialValues: {
       email: "",
@@ -24,8 +25,7 @@ const Auth = () => {
     }),
     onSubmit: async (values) => {
       setLoading(true);
-      setError("");
-      setSuccess("");
+      setMessage({ type: "", text: "" });
       try {
         const userCredential = await signInWithEmailAndPassword(
           auth,
@@ -33,20 +33,22 @@ const Auth = () => {
           values.password
         );
         const user = userCredential.user;
+
         // Check if the user is an admin
         if (user.email !== "sultanabaniks@gmail.com") {
           setLoading(false);
-          setError("Only admins can log in.");
+          setMessage({ type: "error", text: "Only admins can log in." });
           return;
         }
+
         console.log("Admin signed in:", user);
-        setSuccess("Admin signed in successfully!");
+        setMessage({ type: "success", text: "Admin signed in successfully!" });
         formik.resetForm();
         setTimeout(() => {
           navigate("/home");
         }, 2000); // Delay of 2 seconds before navigating
       } catch (error) {
-        setError(error.message);
+        setMessage({ type: "error", text: error.message });
         console.error("Error signing in:", error);
       } finally {
         setLoading(false);
@@ -57,8 +59,7 @@ const Auth = () => {
   return (
     <div className="auth flex flex-col items-center justify-center h-screen">
       <h1 className="text-3xl font-bold underline mb-4">Login</h1>
-      {error && <Alert severity="error">{error}</Alert>}
-      {success && <Alert severity="success">{success}</Alert>}
+      <MessageBox type={message.type} text={message.text} />
       <form
         className="flex flex-col gap-4 w-[300px] mt-[20px]"
         onSubmit={formik.handleSubmit}
