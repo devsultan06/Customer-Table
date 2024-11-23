@@ -115,6 +115,7 @@ export default function Home() {
   const [customers, setCustomers] = useState([]);
   const [loading, setLoading] = useState(false);
   const [modalOpen, setModalOpen] = useState(false);
+  const [searchQuery, setSearchQuery] = useState(""); // Search query state
   const [alert, setAlert] = useState({
     severity: "",
     message: "",
@@ -148,6 +149,11 @@ export default function Home() {
     setOrder(isAsc ? "desc" : "asc");
     setOrderBy(property);
   };
+  const filteredCustomers = useMemo(() => {
+    return customers.filter((customer) =>
+      customer.name.toLowerCase().includes(searchQuery.toLowerCase())
+    );
+  }, [customers, searchQuery]);
 
   const fetchCustomers = async () => {
     setLoading(true);
@@ -317,6 +323,8 @@ export default function Home() {
             width: { xs: "100%", sm: "300px" },
             display: { xs: "block", sm: "inline-block" },
           }}
+          value={searchQuery}
+          onChange={(e) => setSearchQuery(e.target.value)}
         />
         <TableContainer>
           <Table
@@ -352,14 +360,24 @@ export default function Home() {
                     </div>
                   </TableCell>
                 </TableRow>
-              ) : customers.length === 0 ? (
+              ) : searchQuery && filteredCustomers.length === 0 ? (
+                // Show "No results found" when a search query has no matches
+                <TableRow>
+                  <TableCell colSpan={headCells.length + 1} align="center">
+                    <Typography>
+                      No results found for "<strong>{searchQuery}</strong>".
+                      Please try a different search term.
+                    </Typography>
+                  </TableCell>
+                </TableRow>
+              ) : filteredCustomers.length === 0 ? (
                 <TableRow>
                   <TableCell colSpan={headCells.length + 1} align="center">
                     <Typography>No data available in the database.</Typography>
                   </TableCell>
                 </TableRow>
               ) : (
-                [...customers]
+                filteredCustomers
                   .sort(getComparator(order, orderBy)) // Sort the full data set
                   .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage) // Then slice for the current page
                   .map((customer, index) => (
