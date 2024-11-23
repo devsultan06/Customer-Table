@@ -207,7 +207,7 @@ export default function Home() {
     handleMenuClose();
   };
 
-  const exportToExcel = useExportToExcel(customers);
+  const exportToExcel = useExportToExcel(customers, setAlert); // Call the custom hook
 
   return (
     <Box sx={{ width: "100%", padding: "20px" }}>

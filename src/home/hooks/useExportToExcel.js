@@ -2,8 +2,17 @@
 import * as XLSX from "xlsx";
 
 // Custom hook to export data to Excel
-const useExportToExcel = (customers) => {
+const useExportToExcel = (customers, setAlert) => {
   const exportToExcel = () => {
+    if (!customers.length) {
+      console.error("No data to export");
+      setAlert({
+        severity: "error",
+        message: "No data to export to Excel",
+        open: true,
+      });
+      return;
+    }
     try {
       // Prepare data
       const dataToExport = customers.map((customer) => ({

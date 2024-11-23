@@ -15,7 +15,6 @@ const Auth = () => {
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState({ type: "", text: "" });
   const navigate = useNavigate();
-  const { theme } = useThemeMode();
 
   const formik = useFormik({
     initialValues: {
