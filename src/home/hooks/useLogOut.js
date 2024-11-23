@@ -14,7 +14,7 @@ const useLogout = () => {
       console.error("Error logging out: ", error); // Handle errors if needed
     }
   };
-
+ 
   return { handleLogout };
 };
 

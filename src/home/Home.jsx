@@ -16,6 +16,7 @@ import {
   TextField,
   FormControlLabel,
   Switch,
+  Checkbox,
 } from "@mui/material";
 import AddIcon from "@mui/icons-material/Add";
 import { visuallyHidden } from "@mui/utils";
@@ -53,9 +54,9 @@ function EnhancedTableHead(props) {
   return (
     <TableHead>
       <TableRow>
-        {/* <TableCell padding="checkbox">
+        <TableCell padding="checkbox">
           <Checkbox color="primary" />
-        </TableCell> */}
+        </TableCell>
         {headCells.map((headCell) => (
           <TableCell
             key={headCell.id}
@@ -316,9 +317,9 @@ export default function Home() {
                       }}
                       key={customer.id}
                     >
-                      {/* <TableCell padding="checkbox">
+                      <TableCell padding="checkbox">
                         <Checkbox color="primary" />
-                      </TableCell> */}
+                      </TableCell>
                       <TableCell>{page * rowsPerPage + index + 1}</TableCell>
                       <TableCell>
                         <h1>{customer.name}</h1>
