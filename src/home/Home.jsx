@@ -12,37 +12,26 @@ import {
   Toolbar,
   Typography,
   Paper,
-  Checkbox,
-  IconButton,
-  Tooltip,
+  Button,
+  TextField,
   FormControlLabel,
   Switch,
-  TextField,
-  Button,
-  Modal,
-  Select,
-  FormControl,
-  InputLabel,
-  MenuItem,
-  Menu,
 } from "@mui/material";
-import { alpha } from "@mui/material/styles";
 import AddIcon from "@mui/icons-material/Add";
-import DeleteIcon from "@mui/icons-material/Delete";
-import FilterListIcon from "@mui/icons-material/FilterList";
 import { visuallyHidden } from "@mui/utils";
-import { addDoc, collection, getDocs } from "firebase/firestore";
 import { db } from "../firebase/config/index"; // Update with your Firebase config path
 import { ColorRing } from "react-loader-spinner";
 import AlertMessage from "./components/MessageBox";
 import LogoutIcon from "@mui/icons-material/Logout";
-import { auth } from "./../firebase/config/index";
-import { signOut } from "firebase/auth";
-import { useNavigate } from "react-router-dom";
-import MoreVertIcon from "@mui/icons-material/MoreVert";
-import ErrorOutlineIcon from "@mui/icons-material/ErrorOutline";
 import { deleteDoc, doc } from "firebase/firestore";
-import EditIcon from "@mui/icons-material/Edit";
+import useExportToExcel from "./hooks/useExportToExcel"; // Import the custom hook
+import ActionMenu from "./components/ActionMenu";
+import AddStaffModal from "./components/AddStaffModal";
+import useFetchCustomers from "./hooks/useFetchCustomers";
+import headCells from "./data/headCells";
+import useSaveCustomer from "./hooks/useSaveCustomer";
+import useLogout from "./hooks/useLogOut";
+
 function descendingComparator(a, b, orderBy) {
   if (b[orderBy] < a[orderBy]) return -1;
   if (b[orderBy] > a[orderBy]) return 1;
@@ -54,21 +43,6 @@ function getComparator(order, orderBy) {
     ? (a, b) => descendingComparator(a, b, orderBy)
     : (a, b) => -descendingComparator(a, b, orderBy);
 }
-
-const headCells = [
-  { id: "index", label: "#" }, // Ensure the ID matches the column logic
-  { id: "name", label: "Name" },
-
-  {
-    id: "description",
-    label: "Description",
-  },
-  { id: "status", label: "Status" },
-  { id: "rate", label: "Rate" },
-  { id: "balance", label: "Balance" },
-  { id: "deposit", label: "Deposit" },
-  { id: "action", label: "Actions" },
-];
 
 function EnhancedTableHead(props) {
   const { order, orderBy, onRequestSort } = props;
@@ -112,7 +86,6 @@ export default function Home() {
   const [page, setPage] = useState(0);
   const [dense, setDense] = useState(false);
   const [rowsPerPage, setRowsPerPage] = useState(5);
-  const [customers, setCustomers] = useState([]);
   const [loading, setLoading] = useState(false);
   const [modalOpen, setModalOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState(""); // Search query state
@@ -121,6 +94,9 @@ export default function Home() {
     message: "",
     open: false,
   }); // Alert state
+
+  const [menuAnchor, setMenuAnchor] = useState(null); // State to track menu open/close
+  const [selectedCustomer, setSelectedCustomer] = useState(null); // Track the customer for dropdown actions
   const [newCustomer, setNewCustomer] = useState({
     name: "",
     description: "",
@@ -129,8 +105,15 @@ export default function Home() {
     balance: "",
     deposit: "",
   });
-  const [menuAnchor, setMenuAnchor] = useState(null); // State to track menu open/close
-  const [selectedCustomer, setSelectedCustomer] = useState(null); // Track the customer for dropdown actions
+  const { customers, fetchCustomers, setCustomers } = useFetchCustomers(
+    setLoading,
+    setAlert
+  );
+
+  const handleInputChange = (e) => {
+    const { name, value } = e.target;
+    setNewCustomer({ ...newCustomer, [name]: value });
+  };
 
   const statusColors = {
     Open: { backgroundColor: "#F0F1FA", textColor: "#4F5AED" }, // Open - Slightly darker green for text
@@ -138,11 +121,6 @@ export default function Home() {
     Due: { backgroundColor: "#FAF0F3", textColor: "#D12953" }, // Due - Darker orange for text
     Paid: { backgroundColor: "#E1FCEF", textColor: "#14804A" }, // Paid - Deep blue for text
   };
-
-  // Check if all fields are filled
-  const isFormValid = useMemo(() => {
-    return Object.values(newCustomer).every((value) => value.trim() !== "");
-  }, [newCustomer]);
 
   const handleRequestSort = (event, property) => {
     const isAsc = orderBy === property && order === "asc";
@@ -154,28 +132,6 @@ export default function Home() {
       customer.name.toLowerCase().includes(searchQuery.toLowerCase())
     );
   }, [customers, searchQuery]);
-
-  const fetchCustomers = async () => {
-    setLoading(true);
-    try {
-      const querySnapshot = await getDocs(collection(db, "customers"));
-      const customerData = querySnapshot.docs.map((doc) => ({
-        id: doc.id,
-        ...doc.data(),
-      }));
-      setCustomers(customerData);
-    } catch (err) {
-      setAlert({
-        severity: "error",
-        message: `Error fetching data: ${err.message}`,
-        open: true,
-      });
-      setCustomers([]); // Ensure no data remains when there's an error
-    } finally {
-      setLoading(false);
-    }
-  };
-  const isDarkMode = document.documentElement.classList.contains("dark");
 
   useEffect(() => {
     fetchCustomers();
@@ -193,62 +149,21 @@ export default function Home() {
     setModalOpen(false); // Close the modal
   };
 
-  const handleInputChange = (e) => {
-    const { name, value } = e.target;
-    setNewCustomer({ ...newCustomer, [name]: value });
-  };
+  const { handleSaveCustomer } = useSaveCustomer(
+    newCustomer,
+    setNewCustomer,
+    fetchCustomers,
+    setAlert,
+    setCustomers,
+    setLoading,
+    handleCloseModal
+  );
 
-  const handleSaveCustomer = async () => {
-    setLoading(true);
-    try {
-      const customerToSave = {
-        ...newCustomer,
-        balance: parseFloat(newCustomer.balance), // Convert balance to number
-        deposit: parseFloat(newCustomer.deposit), // Convert deposit to number
-        rate: parseFloat(newCustomer.rate), // Convert rate to number
-      };
-      const docRef = await addDoc(collection(db, "customers"), customerToSave);
-      setCustomers((prevCustomers) => [
-        ...prevCustomers,
-        { ...newCustomer, id: docRef.id },
-      ]);
-      setNewCustomer({
-        name: "",
-        description: "",
-        status: "",
-        rate: "",
-        balance: "",
-        deposit: "",
-      });
-      handleCloseModal();
-      fetchCustomers();
-      setAlert({
-        severity: "success",
-        message: "Customer added successfully!",
-        open: true,
-      });
-    } catch (err) {
-      setAlert({
-        severity: "error",
-        message: "Failed to add customer. Please try again.",
-        open: true,
-      });
-    } finally {
-      setLoading(false);
-    }
-  };
+  const { handleLogout } = useLogout();
 
-  const navigate = useNavigate();
-
-  const handleLogout = async () => {
-    try {
-      await signOut(auth); // Log the user out of Firebase
-      navigate("/auth"); // Redirect to login page after logging out
-    } catch (error) {
-      console.error("Error logging out: ", error); // Handle errors if needed
-    }
-  };
   const handleMenuOpen = (event, customer) => {
+    console.log("Menu opened for customer", customer);
+
     setMenuAnchor(event.currentTarget);
     setSelectedCustomer(customer); // Save the selected customer
   };
@@ -260,20 +175,19 @@ export default function Home() {
 
   const handleDelete = async () => {
     console.log(`Delete clicked for customer`, selectedCustomer);
-    setLoading(true);
+
+    if (!selectedCustomer?.id) {
+      console.error("No customer ID provided for deletion");
+      return;
+    }
+
+    // Reference to the Firestore document
+    const docRef = doc(db, "customers", selectedCustomer.id);
+
     try {
-      // Assume `selectedCustomer.id` contains the Firestore document ID
-      if (!selectedCustomer?.id) {
-        console.error("No customer ID provided for deletion");
-        return;
-      }
-
-      // Reference to the Firestore document
-      const docRef = doc(db, "customers", selectedCustomer.id);
-
-      // Delete the document
+      setLoading(true);
+      // Delete the document from Firestore
       await deleteDoc(docRef);
-
       console.log(
         `Customer with ID ${selectedCustomer.id} deleted successfully`
       );
@@ -282,7 +196,7 @@ export default function Home() {
         message: "Customer deleted successfully!",
         open: true,
       });
-      fetchCustomers();
+      fetchCustomers(); // Assuming this fetches the updated list of customers
     } catch (error) {
       console.error("Error deleting customer:", error);
     } finally {
@@ -292,6 +206,9 @@ export default function Home() {
     // Close the menu after handling the action
     handleMenuClose();
   };
+
+  const exportToExcel = useExportToExcel(customers);
+
   return (
     <Box sx={{ width: "100%", padding: "20px" }}>
       <Paper sx={{ width: "100%", mb: 2 }}>
@@ -312,20 +229,31 @@ export default function Home() {
             Logout
           </Button>
         </div>
+        <div className="flex justify-between items-center">
+          <TextField
+            id="outlined-basic"
+            label="Search"
+            variant="outlined"
+            sx={{
+              marginLeft: "10px",
+              fontSize: "10px",
+              width: { xs: "100%", sm: "300px" },
+              display: { xs: "block", sm: "inline-block" },
+            }}
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+          />
+          <Button
+            variant="contained"
+            onClick={exportToExcel} // Attach the export function to this button
+            sx={{
+              marginRight: "10px",
+            }}
+          >
+            Export to CSV
+          </Button>
+        </div>
 
-        <TextField
-          id="outlined-basic"
-          label="Search"
-          variant="outlined"
-          sx={{
-            marginLeft: "10px",
-            fontSize: "10px",
-            width: { xs: "100%", sm: "300px" },
-            display: { xs: "block", sm: "inline-block" },
-          }}
-          value={searchQuery}
-          onChange={(e) => setSearchQuery(e.target.value)}
-        />
         <TableContainer>
           <Table
             sx={{ minWidth: 750 }}
@@ -437,100 +365,18 @@ export default function Home() {
                         {/* Smaller paragraph */}
                       </TableCell>{" "}
                       <TableCell>
-                        <IconButton
-                          onClick={(event) => handleMenuOpen(event, customer)}
-                        >
-                          <MoreVertIcon
-                            sx={{
-                              fontSize: "20px",
-                              color: "black",
-                            }}
-                          />
-                        </IconButton>
-                        <Menu
+                        <ActionMenu
                           anchorEl={menuAnchor}
                           open={Boolean(menuAnchor)}
-                          onClose={handleMenuClose}
-                        >
-                          <MenuItem
-                            sx={{
-                              color: "#4B85FA",
-                            }}
-                          >
-                            <Button
-                              sx={{
-                                display: "flex",
-                                alignItems: "center",
-                              }}
-                            >
-                              View
-                              <ErrorOutlineIcon
-                                sx={{
-                                  marginLeft: "10px",
-                                }}
-                              />
-                            </Button>
-                          </MenuItem>
-
-                          <MenuItem
-                            sx={{
-                              color: "#4B85FA",
-                            }}
-                          >
-                            <Button
-                              sx={{
-                                display: "flex",
-                                alignItems: "center",
-                              }}
-                            >
-                              Edit
-                              <EditIcon
-                                sx={{
-                                  marginLeft: "10px",
-                                }}
-                              />
-                            </Button>
-                          </MenuItem>
-                          <MenuItem
-                            onClick={handleDelete}
-                            sx={{
-                              color: "#DC4067",
-                            }}
-                          >
-                            {loading ? (
-                              <ColorRing
-                                visible={true}
-                                height="30"
-                                width="30"
-                                ariaLabel="color-ring-loading"
-                                wrapperStyle={{}}
-                                colors={[
-                                  "#316bf3",
-                                  "#316bf3",
-                                  "#316bf3",
-                                  "#316bf3",
-                                  "#316bf3",
-                                ]}
-                              />
-                            ) : (
-                              <Button
-                                color="error"
-                                sx={{
-                                  display: "flex",
-                                  alignItems: "center",
-                                }}
-                              >
-                                Delete
-                                <DeleteIcon
-                                  sx={{
-                                    marginLeft: "10px",
-                                  }}
-                                />
-                              </Button>
-                            )}
-                          </MenuItem>
-                        </Menu>
-                      </TableCell>{" "}
+                          handleMenuOpen={(event) =>
+                            handleMenuOpen(event, customer)
+                          }
+                          handleMenuClose={handleMenuClose}
+                          handleDelete={handleDelete}
+                          loading={loading}
+                          customer={customer} // Pass customer data if needed
+                        />{" "}
+                      </TableCell>
                     </TableRow>
                   ))
               )}
@@ -562,107 +408,15 @@ export default function Home() {
         Add Customer
       </Button>
       {/* Modal for Adding Customer */}
-      <Modal open={modalOpen} onClose={handleCloseModal}>
-        <Box
-          sx={{
-            position: "absolute",
-            top: "50%",
-            left: "50%",
-            transform: "translate(-50%, -50%)",
-            width: 400,
-            bgcolor: "background.paper",
-            border: "2px solid #000",
-            boxShadow: 24,
-            p: 4,
-            borderRadius: 2,
-          }}
-        >
-          <Typography variant="h6" component="h2" sx={{ mb: 2 }}>
-            Add New Customer
-          </Typography>
-          <TextField
-            label="Name"
-            name="name"
-            value={newCustomer.name}
-            onChange={handleInputChange}
-            fullWidth
-            sx={{ mb: 2 }}
-          />
-          <TextField
-            label="Description"
-            name="description"
-            value={newCustomer.description}
-            onChange={handleInputChange}
-            fullWidth
-            sx={{ mb: 2 }}
-          />
-          <FormControl fullWidth sx={{ mb: 2 }}>
-            <InputLabel>Status</InputLabel>
-            <Select
-              label="Status"
-              name="status"
-              value={newCustomer.status}
-              onChange={handleInputChange}
-            >
-              <MenuItem value="Open">Open</MenuItem>
-              <MenuItem value="Inactive">Inactive</MenuItem>
-              <MenuItem value="Due">Due</MenuItem> {/* Changed value */}
-              <MenuItem value="Paid">Paid</MenuItem> {/* Changed value */}
-            </Select>
-          </FormControl>
-
-          <TextField
-            label="Rate"
-            name="rate"
-            type="number"
-            value={newCustomer.rate}
-            onChange={handleInputChange}
-            fullWidth
-            sx={{ mb: 2 }}
-          />
-          <TextField
-            label="Balance"
-            name="balance"
-            type="number"
-            value={newCustomer.balance}
-            onChange={handleInputChange}
-            fullWidth
-            sx={{ mb: 2 }}
-          />
-          <TextField
-            label="Deposit"
-            name="deposit"
-            type="number"
-            value={newCustomer.deposit}
-            onChange={handleInputChange}
-            fullWidth
-            sx={{ mb: 2 }}
-          />
-          <Button
-            variant="contained"
-            color="primary"
-            onClick={handleSaveCustomer}
-            disabled={!isFormValid}
-            sx={{ mr: 2 }}
-          >
-            {loading ? (
-              <ColorRing
-                visible={true}
-                height="30"
-                width="30"
-                ariaLabel="color-ring-loading"
-                wrapperStyle={{}}
-                colors={["#316bf3", "#316bf3", "#316bf3", "#316bf3", "#316bf3"]}
-              />
-            ) : (
-              "Save"
-            )}{" "}
-          </Button>
-          <Button variant="outlined" onClick={handleCloseModal}>
-            Cancel
-          </Button>
-        </Box>
-      </Modal>
+      <AddStaffModal
+        open={modalOpen}
+        handleClose={handleCloseModal}
+        handleSaveCustomer={handleSaveCustomer}
+        loading={loading}
+        handleCloseModal={handleCloseModal}
+        newCustomer={newCustomer}
+        handleInputChange={handleInputChange}
+      />
       {/* Alert Component */}
       <AlertMessage alert={alert} setAlert={setAlert} />{" "}
       {/* Include the alert message */}{" "}
