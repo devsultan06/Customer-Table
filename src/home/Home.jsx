@@ -24,6 +24,7 @@ import {
   FormControl,
   InputLabel,
   MenuItem,
+  Menu,
 } from "@mui/material";
 import { alpha } from "@mui/material/styles";
 import AddIcon from "@mui/icons-material/Add";
@@ -38,7 +39,10 @@ import LogoutIcon from "@mui/icons-material/Logout";
 import { auth } from "./../firebase/config/index";
 import { signOut } from "firebase/auth";
 import { useNavigate } from "react-router-dom";
-
+import MoreVertIcon from "@mui/icons-material/MoreVert";
+import ErrorOutlineIcon from "@mui/icons-material/ErrorOutline";
+import { deleteDoc, doc } from "firebase/firestore";
+import EditIcon from "@mui/icons-material/Edit";
 function descendingComparator(a, b, orderBy) {
   if (b[orderBy] < a[orderBy]) return -1;
   if (b[orderBy] > a[orderBy]) return 1;
@@ -52,17 +56,18 @@ function getComparator(order, orderBy) {
 }
 
 const headCells = [
-  { id: "name", numeric: false, disablePadding: true, label: "Name" },
+  { id: "index", label: "#" }, // Ensure the ID matches the column logic
+  { id: "name", label: "Name" },
+
   {
     id: "description",
-    numeric: false,
-    disablePadding: false,
     label: "Description",
   },
-  { id: "status", numeric: false, disablePadding: false, label: "Status" },
-  { id: "rate", numeric: true, disablePadding: false, label: "Rate" },
-  { id: "balance", numeric: true, disablePadding: false, label: "Balance" },
-  { id: "deposit", numeric: true, disablePadding: false, label: "Deposit" },
+  { id: "status", label: "Status" },
+  { id: "rate", label: "Rate" },
+  { id: "balance", label: "Balance" },
+  { id: "deposit", label: "Deposit" },
+  { id: "action", label: "Actions" },
 ];
 
 function EnhancedTableHead(props) {
@@ -74,9 +79,9 @@ function EnhancedTableHead(props) {
   return (
     <TableHead>
       <TableRow>
-        <TableCell padding="checkbox">
+        {/* <TableCell padding="checkbox">
           <Checkbox color="primary" />
-        </TableCell>
+        </TableCell> */}
         {headCells.map((headCell) => (
           <TableCell
             key={headCell.id}
@@ -102,7 +107,7 @@ function EnhancedTableHead(props) {
 }
 export default function Home() {
   const [order, setOrder] = useState("asc");
-  const [orderBy, setOrderBy] = useState("name");
+  const [orderBy, setOrderBy] = useState("index");
   const [selected, setSelected] = useState([]);
   const [page, setPage] = useState(0);
   const [dense, setDense] = useState(false);
@@ -123,6 +128,8 @@ export default function Home() {
     balance: "",
     deposit: "",
   });
+  const [menuAnchor, setMenuAnchor] = useState(null); // State to track menu open/close
+  const [selectedCustomer, setSelectedCustomer] = useState(null); // Track the customer for dropdown actions
 
   const statusColors = {
     Open: { backgroundColor: "#F0F1FA", textColor: "#4F5AED" }, // Open - Slightly darker green for text
@@ -235,7 +242,50 @@ export default function Home() {
       console.error("Error logging out: ", error); // Handle errors if needed
     }
   };
+  const handleMenuOpen = (event, customer) => {
+    setMenuAnchor(event.currentTarget);
+    setSelectedCustomer(customer); // Save the selected customer
+  };
 
+  const handleMenuClose = () => {
+    setMenuAnchor(null);
+    setSelectedCustomer(null);
+  };
+
+  const handleDelete = async () => {
+    console.log(`Delete clicked for customer`, selectedCustomer);
+    setLoading(true);
+    try {
+      // Assume `selectedCustomer.id` contains the Firestore document ID
+      if (!selectedCustomer?.id) {
+        console.error("No customer ID provided for deletion");
+        return;
+      }
+
+      // Reference to the Firestore document
+      const docRef = doc(db, "customers", selectedCustomer.id);
+
+      // Delete the document
+      await deleteDoc(docRef);
+
+      console.log(
+        `Customer with ID ${selectedCustomer.id} deleted successfully`
+      );
+      setAlert({
+        severity: "success",
+        message: "Customer deleted successfully!",
+        open: true,
+      });
+      fetchCustomers();
+    } catch (error) {
+      console.error("Error deleting customer:", error);
+    } finally {
+      setLoading(false);
+    }
+
+    // Close the menu after handling the action
+    handleMenuClose();
+  };
   return (
     <Box sx={{ width: "100%", padding: "20px" }}>
       <Paper sx={{ width: "100%", mb: 2 }}>
@@ -309,20 +359,33 @@ export default function Home() {
                   </TableCell>
                 </TableRow>
               ) : (
-                customers
-                  .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage) // Slice the data based on page and rowsPerPage
-                  .sort(getComparator(order, orderBy))
-                  .map((customer) => (
-                    <TableRow hover key={customer.id}>
-                      <TableCell padding="checkbox">
+                [...customers]
+                  .sort(getComparator(order, orderBy)) // Sort the full data set
+                  .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage) // Then slice for the current page
+                  .map((customer, index) => (
+                    <TableRow
+                      hover
+                      sx={{
+                        cursor: "pointer",
+                      }}
+                      key={customer.id}
+                    >
+                      {/* <TableCell padding="checkbox">
                         <Checkbox color="primary" />
-                      </TableCell>
+                      </TableCell> */}
+                      <TableCell>{page * rowsPerPage + index + 1}</TableCell>
                       <TableCell>
                         <h1>{customer.name}</h1>
                         <p style={{ fontSize: "0.8rem" }}>{customer.id}</p>{" "}
                         {/* Smaller paragraph */}
                       </TableCell>
-                      <TableCell>{customer.description}</TableCell>
+                      <TableCell
+                        sx={{
+                          width: "300px",
+                        }}
+                      >
+                        {customer.description}
+                      </TableCell>
                       <TableCell>
                         <Button
                           variant="contained"
@@ -354,6 +417,101 @@ export default function Home() {
                         <h1>${customer.deposit}</h1>
                         <p style={{ fontSize: "0.8rem" }}>CAD</p>{" "}
                         {/* Smaller paragraph */}
+                      </TableCell>{" "}
+                      <TableCell>
+                        <IconButton
+                          onClick={(event) => handleMenuOpen(event, customer)}
+                        >
+                          <MoreVertIcon
+                            sx={{
+                              fontSize: "20px",
+                              color: "black",
+                            }}
+                          />
+                        </IconButton>
+                        <Menu
+                          anchorEl={menuAnchor}
+                          open={Boolean(menuAnchor)}
+                          onClose={handleMenuClose}
+                        >
+                          <MenuItem
+                            sx={{
+                              color: "#4B85FA",
+                            }}
+                          >
+                            <Button
+                              sx={{
+                                display: "flex",
+                                alignItems: "center",
+                              }}
+                            >
+                              View
+                              <ErrorOutlineIcon
+                                sx={{
+                                  marginLeft: "10px",
+                                }}
+                              />
+                            </Button>
+                          </MenuItem>
+
+                          <MenuItem
+                            sx={{
+                              color: "#4B85FA",
+                            }}
+                          >
+                            <Button
+                              sx={{
+                                display: "flex",
+                                alignItems: "center",
+                              }}
+                            >
+                              Edit
+                              <EditIcon
+                                sx={{
+                                  marginLeft: "10px",
+                                }}
+                              />
+                            </Button>
+                          </MenuItem>
+                          <MenuItem
+                            onClick={handleDelete}
+                            sx={{
+                              color: "#DC4067",
+                            }}
+                          >
+                            {loading ? (
+                              <ColorRing
+                                visible={true}
+                                height="30"
+                                width="30"
+                                ariaLabel="color-ring-loading"
+                                wrapperStyle={{}}
+                                colors={[
+                                  "#316bf3",
+                                  "#316bf3",
+                                  "#316bf3",
+                                  "#316bf3",
+                                  "#316bf3",
+                                ]}
+                              />
+                            ) : (
+                              <Button
+                                color="error"
+                                sx={{
+                                  display: "flex",
+                                  alignItems: "center",
+                                }}
+                              >
+                                Delete
+                                <DeleteIcon
+                                  sx={{
+                                    marginLeft: "10px",
+                                  }}
+                                />
+                              </Button>
+                            )}
+                          </MenuItem>
+                        </Menu>
                       </TableCell>{" "}
                     </TableRow>
                   ))
