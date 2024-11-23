@@ -60,13 +60,7 @@ const Auth = () => {
   });
 
   return (
-    <div
-      className={`auth flex flex-col items-center justify-center h-screen transition-colors duration-300 ${
-        theme === "dark"
-          ? "dark:bg-gray-800 dark:text-white"
-          : "bg-white text-black"
-      }`}
-    >
+    <div className="auth flex flex-col bg-white text-black items-center justify-center h-screen transition-colors duration-300 dark:bg-gray-800 dark:text-white">
       {" "}
       <h1 className="text-3xl font-bold underline mb-4">Login</h1>
       <MessageBox type={message.type} text={message.text} />

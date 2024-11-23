@@ -7,12 +7,12 @@ const Theme = () => {
   const { theme, toggleTheme } = useThemeMode();
 
   return (
-    <div>
+    <div className="fixed top-[30px] right-[50px]">
       <IconButton onClick={toggleTheme} aria-label="Toggle theme">
         {theme === "dark" ? (
-          <LightMode sx={{ color: "#000" }} /> // Dark mode icon
+          <LightMode className="text-white" /> // Dark mode icon
         ) : (
-          <Brightness4 sx={{ color: "#000" }} /> // Light mode icon
+          <Brightness4 className="text-black" /> // Light mode icon
         )}
       </IconButton>
     </div>

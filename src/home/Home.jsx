@@ -34,6 +34,10 @@ import { addDoc, collection, getDocs } from "firebase/firestore";
 import { db } from "../firebase/config/index"; // Update with your Firebase config path
 import { ColorRing } from "react-loader-spinner";
 import AlertMessage from "./components/MessageBox";
+import LogoutIcon from "@mui/icons-material/Logout";
+import { auth } from "./../firebase/config/index";
+import { signOut } from "firebase/auth";
+import { useNavigate } from "react-router-dom";
 
 function descendingComparator(a, b, orderBy) {
   if (b[orderBy] < a[orderBy]) return -1;
@@ -158,6 +162,7 @@ export default function Home() {
       setLoading(false);
     }
   };
+  const isDarkMode = document.documentElement.classList.contains("dark");
 
   useEffect(() => {
     fetchCustomers();
@@ -220,14 +225,38 @@ export default function Home() {
     }
   };
 
+  const navigate = useNavigate();
+
+  const handleLogout = async () => {
+    try {
+      await signOut(auth); // Log the user out of Firebase
+      navigate("/auth"); // Redirect to login page after logging out
+    } catch (error) {
+      console.error("Error logging out: ", error); // Handle errors if needed
+    }
+  };
+
   return (
     <Box sx={{ width: "100%", padding: "20px" }}>
       <Paper sx={{ width: "100%", mb: 2 }}>
-        <Toolbar>
-          <Typography variant="h6" sx={{ flex: "1 1 100%" }}>
-            Customer Table
-          </Typography>
-        </Toolbar>
+        <div className="flex justify-between items-center">
+          <Toolbar>
+            <Typography variant="h6" sx={{ flex: "1 1 100%" }}>
+              Customer Table
+            </Typography>
+          </Toolbar>
+          <Button
+            onClick={handleLogout}
+            variant="contained"
+            startIcon={<LogoutIcon />}
+            sx={{
+              marginRight: "10px",
+            }}
+          >
+            Logout
+          </Button>
+        </div>
+
         <TextField
           id="outlined-basic"
           label="Search"
