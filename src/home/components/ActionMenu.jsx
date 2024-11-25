@@ -15,7 +15,7 @@ const ActionMenu = ({
   handleMenuClose,
   handleDelete,
   loading,
-  handleEdit
+  handleOpenEditModal,
 }) => {
   const { currentUser } = useContext(AuthContext);
 
@@ -33,7 +33,7 @@ const ActionMenu = ({
           </Button>
         </MenuItem>
 
-        <MenuItem sx={{ color: "#4B85FA" }} onClick={handleEdit}>
+        <MenuItem sx={{ color: "#4B85FA" }} onClick={handleOpenEditModal}>
           <Button sx={{ display: "flex", alignItems: "center" }}>
             Edit
             <EditIcon sx={{ marginLeft: "10px" }} />

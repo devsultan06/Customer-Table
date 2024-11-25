@@ -24,7 +24,7 @@ import { db } from "../firebase/config/index"; // Update with your Firebase conf
 import { ColorRing } from "react-loader-spinner";
 import AlertMessage from "./components/MessageBox";
 import LogoutIcon from "@mui/icons-material/Logout";
-import { deleteDoc, doc } from "firebase/firestore";
+import { deleteDoc, doc, updateDoc } from "firebase/firestore";
 import useExportToExcel from "./hooks/useExportToExcel"; // Import the custom hook
 import ActionMenu from "./components/ActionMenu";
 import AddStaffModal from "./components/AddStaffModal";
@@ -32,6 +32,8 @@ import useFetchCustomers from "./hooks/useFetchCustomers";
 import headCells from "./data/headCells";
 import useSaveCustomer from "./hooks/useSaveCustomer";
 import useLogout from "./hooks/useLogOut";
+import EditStaffModal from "./components/EditStaffModal";
+import useUpdateCustomer from "./hooks/useUpdateCustomer";
 
 function descendingComparator(a, b, orderBy) {
   if (b[orderBy] < a[orderBy]) return -1;
@@ -98,6 +100,7 @@ export default function Home() {
 
   const [menuAnchor, setMenuAnchor] = useState(null); // State to track menu open/close
   const [selectedCustomer, setSelectedCustomer] = useState(null); // Track the customer for dropdown actions
+
   const [newCustomer, setNewCustomer] = useState({
     name: "",
     description: "",
@@ -128,6 +131,11 @@ export default function Home() {
     setOrder(isAsc ? "desc" : "asc");
     setOrderBy(property);
   };
+
+  const handleChangeDense = (event) => {
+    setDense(event.target.checked);
+  };
+
   const filteredCustomers = useMemo(() => {
     return customers.filter((customer) =>
       customer.name.toLowerCase().includes(searchQuery.toLowerCase())
@@ -138,11 +146,9 @@ export default function Home() {
     fetchCustomers();
   }, []);
 
-  const handleChangeDense = (event) => {
-    setDense(event.target.checked);
-  };
+  const [editmodalOpen, setEditModalOpen] = useState(false);
 
-  const handleAddCustomer = () => {
+  const handleOpenModal = () => {
     setModalOpen(true); // Open the modal
   };
 
@@ -209,6 +215,23 @@ export default function Home() {
   };
 
   const exportToExcel = useExportToExcel(customers, setAlert); // Call the custom hook
+
+  const handleOpenEditModal = () => {
+    setEditModalOpen(true); // Open the modal
+    console.log("Editing", selectedCustomer);
+  };
+
+  const handleCloseEditModal = () => {
+    setEditModalOpen(false); // Close the modal
+  };
+
+  const { handleEdit } = useUpdateCustomer(
+    setLoading,
+    setAlert,
+    fetchCustomers,
+    handleCloseEditModal,
+    handleMenuClose
+  ); // Use the custom hook
 
   return (
     <Box sx={{ width: "100%", padding: "20px" }}>
@@ -375,7 +398,7 @@ export default function Home() {
                           handleMenuClose={handleMenuClose}
                           handleDelete={handleDelete}
                           loading={loading}
-                          customer={customer} // Pass customer data if needed
+                          handleOpenEditModal={handleOpenEditModal}
                         />{" "}
                       </TableCell>
                     </TableRow>
@@ -404,7 +427,7 @@ export default function Home() {
         variant="contained"
         startIcon={<AddIcon />}
         sx={{ mb: 2, float: "right" }}
-        onClick={handleAddCustomer}
+        onClick={handleOpenModal}
       >
         Add Customer
       </Button>
@@ -417,6 +440,14 @@ export default function Home() {
         handleCloseModal={handleCloseModal}
         newCustomer={newCustomer}
         handleInputChange={handleInputChange}
+      />
+      <EditStaffModal
+        open={editmodalOpen}
+        handleClose={handleCloseEditModal}
+        loading={loading}
+        handleCloseModal={handleCloseEditModal}
+        handleEdit={handleEdit}
+        selectedCustomer={selectedCustomer}
       />
       {/* Alert Component */}
       <AlertMessage alert={alert} setAlert={setAlert} />{" "}
