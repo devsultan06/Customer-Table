@@ -7,7 +7,12 @@ import { AuthProvider } from "./context/AuthContext.jsx";
 import ProtectedRoute from "./routes/ProtectedRoute.jsx"; // Adjust the path as necessary
 
 ReactDOM.createRoot(document.getElementById("root")).render(
-  <BrowserRouter>
+  <BrowserRouter
+    future={{
+      v7_relativeSplatPath: true,
+      v7_startTransition: true,
+    }}
+  >
     <AuthProvider>
       <Routes>
         <Route path="/" element={<Navigate to="/auth" replace />} />
