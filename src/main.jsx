@@ -5,6 +5,7 @@ import Authentication from "./auth/auth";
 import Home from "./home/Home.jsx";
 import { AuthProvider } from "./context/AuthContext.jsx";
 import ProtectedRoute from "./routes/ProtectedRoute.jsx"; // Adjust the path as necessary
+import Admin from "./admin/Admin.jsx";
 
 ReactDOM.createRoot(document.getElementById("root")).render(
   <BrowserRouter
@@ -22,6 +23,14 @@ ReactDOM.createRoot(document.getElementById("root")).render(
           element={
             <ProtectedRoute>
               <Home />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/admin"
+          element={
+            <ProtectedRoute>
+              <Admin />
             </ProtectedRoute>
           }
         />
