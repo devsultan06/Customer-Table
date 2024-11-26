@@ -1,6 +1,6 @@
 // useUpdateCustomer.js
 import { useState } from "react";
-import { doc, updateDoc } from "firebase/firestore";
+import { doc, serverTimestamp, updateDoc } from "firebase/firestore";
 import { db } from "../../firebase/config/index"; // Import your Firebase config
 
 const useUpdateCustomer = (
@@ -22,7 +22,11 @@ const useUpdateCustomer = (
     const docRef = doc(db, "customers", id);
 
     try {
-      await updateDoc(docRef, updatedData);
+      const dataWithTimestamp = {
+        ...updatedData,
+        lastUpdated: serverTimestamp(), // Firebase's server timestamp
+      };
+      await updateDoc(docRef, dataWithTimestamp);
       console.log(`Customer with ID ${id} updated successfully`);
       setAlert({
         severity: "success",

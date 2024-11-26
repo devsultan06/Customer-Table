@@ -34,6 +34,7 @@ import useSaveCustomer from "./hooks/useSaveCustomer";
 import useLogout from "./hooks/useLogOut";
 import EditStaffModal from "./components/EditStaffModal";
 import useUpdateCustomer from "./hooks/useUpdateCustomer";
+import ViewModal from "./components/ViewModal";
 
 function descendingComparator(a, b, orderBy) {
   if (b[orderBy] < a[orderBy]) return -1;
@@ -147,6 +148,7 @@ export default function Home() {
   }, []);
 
   const [editmodalOpen, setEditModalOpen] = useState(false);
+  const [viewmodalOpen, setViewModalOpen] = useState(false);
 
   const handleOpenModal = () => {
     setModalOpen(true); // Open the modal
@@ -232,6 +234,15 @@ export default function Home() {
     handleCloseEditModal,
     handleMenuClose
   ); // Use the custom hook
+
+  const handleOpenViewModal = () => {
+    setViewModalOpen(true); // Open the modal
+    console.log("Editing", selectedCustomer);
+  };
+
+  const handleCloseViewModal = () => {
+    setViewModalOpen(false); // Close the modal
+  };
 
   return (
     <Box sx={{ width: "100%", padding: "20px" }}>
@@ -399,6 +410,7 @@ export default function Home() {
                           handleDelete={handleDelete}
                           loading={loading}
                           handleOpenEditModal={handleOpenEditModal}
+                          handleOpenViewModal={handleOpenViewModal}
                         />{" "}
                       </TableCell>
                     </TableRow>
@@ -447,6 +459,12 @@ export default function Home() {
         loading={loading}
         handleCloseModal={handleCloseEditModal}
         handleEdit={handleEdit}
+        selectedCustomer={selectedCustomer}
+      />
+      <ViewModal
+        open={viewmodalOpen}
+        handleClose={handleCloseViewModal}
+        handleCloseModal={handleCloseViewModal}
         selectedCustomer={selectedCustomer}
       />
       {/* Alert Component */}

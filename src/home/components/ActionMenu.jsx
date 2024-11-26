@@ -16,6 +16,7 @@ const ActionMenu = ({
   handleDelete,
   loading,
   handleOpenEditModal,
+  handleOpenViewModal,
 }) => {
   const { currentUser } = useContext(AuthContext);
 
@@ -26,7 +27,7 @@ const ActionMenu = ({
       </IconButton>
 
       <Menu anchorEl={anchorEl} open={open} onClose={handleMenuClose}>
-        <MenuItem sx={{ color: "#4B85FA" }}>
+        <MenuItem sx={{ color: "#4B85FA" }} onClick={handleOpenViewModal}>
           <Button sx={{ display: "flex", alignItems: "center" }}>
             View
             <ErrorOutlineIcon sx={{ marginLeft: "10px" }} />
