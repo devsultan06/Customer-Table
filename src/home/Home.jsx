@@ -1,4 +1,4 @@
-import React, { useState, useMemo, useEffect } from "react";
+import React, { useState, useMemo, useEffect, useContext } from "react";
 import {
   Box,
   Table,
@@ -36,6 +36,8 @@ import EditStaffModal from "./components/EditStaffModal";
 import useUpdateCustomer from "./hooks/useUpdateCustomer";
 import ViewModal from "./components/ViewModal";
 import ConfirmDeleteModal from "./components/ConfirmDeleteModal";
+import UserMenu from "./components/UserMenu";
+import { AuthContext } from "../context/AuthContext";
 
 function descendingComparator(a, b, orderBy) {
   if (typeof a[orderBy] === "string" && typeof b[orderBy] === "string") {
@@ -114,6 +116,8 @@ export default function Home() {
     balance: "",
     deposit: "",
   });
+
+  const { currentUser } = useContext(AuthContext);
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -267,27 +271,19 @@ export default function Home() {
               Customer Table
             </Typography>
           </Toolbar>
-          <Button
-            onClick={handleLogout}
-            variant="contained"
-            startIcon={<LogoutIcon />}
-            sx={{
-              marginRight: "10px",
-            }}
-          >
-            Logout
-          </Button>
+          <UserMenu handleLogout={handleLogout} email={currentUser.email} />
         </div>
-        <div className="flex justify-between items-center">
+        <div className="flex flex-col sm:flex-row justify-between items-center w-full">
           <TextField
             id="outlined-basic"
             label="Search"
             variant="outlined"
             sx={{
-              marginLeft: "10px",
               fontSize: "10px",
-              width: { xs: "100%", sm: "300px" },
-              display: { xs: "block", sm: "inline-block" },
+              width: { xs: "90%", sm: "300px" },
+              marginBottom: { xs: "10px", sm: "0" },
+              marginLeft: { xs: "0", sm: "10px" },
+              marginRight: { xs: "0", sm: "10px" },
             }}
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
@@ -296,7 +292,9 @@ export default function Home() {
             variant="contained"
             onClick={exportToExcel}
             sx={{
-              marginRight: "10px",
+              width: { xs: "90%", sm: "auto" },
+              marginLeft: { xs: "0", sm: "10px" },
+              marginRight: { xs: "0", sm: "10px" },
             }}
           >
             Export to CSV
