@@ -33,10 +33,10 @@ cd Customer-Table
 
 You can log in with the following test email credentials:
 
-Test Email 1: testuser1@example.com
+Test Email 1: testuser1@gmail.com
 Password: testpassword1
 
-Test Email 2: testuser2@example.com
+Test Email 2: testuser2@gmail.com
 Password: testpassword2
 
 These credentials are pre-configured in the app for testing purposes. After logging in with these credentials, you will have access to the app's customer management features.

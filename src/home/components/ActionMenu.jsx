@@ -16,8 +16,6 @@ const ActionMenu = ({
   handleOpenEditModal,
   handleOpenViewModal,
 }) => {
-  const { currentUser } = useContext(AuthContext);
-
   return (
     <>
       <IconButton onClick={handleMenuOpen}>
@@ -39,17 +37,12 @@ const ActionMenu = ({
           </Button>
         </MenuItem>
 
-        {currentUser.email === "sultanabaniks@gmail.com" && (
-          <MenuItem onClick={handleOpenDeleteModal} sx={{ color: "#DC4067" }}>
-            <Button
-              color="error"
-              sx={{ display: "flex", alignItems: "center" }}
-            >
-              Delete
-              <DeleteIcon sx={{ marginLeft: "10px" }} />
-            </Button>
-          </MenuItem>
-        )}
+        <MenuItem onClick={handleOpenDeleteModal} sx={{ color: "#DC4067" }}>
+          <Button color="error" sx={{ display: "flex", alignItems: "center" }}>
+            Delete
+            <DeleteIcon sx={{ marginLeft: "10px" }} />
+          </Button>
+        </MenuItem>
       </Menu>
     </>
   );

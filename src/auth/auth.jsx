@@ -36,11 +36,11 @@ const Auth = () => {
         const user = userCredential.user;
 
         // Check if the user is an admin
-        if (user.email !== "sultanabaniks@gmail.com") {
-          setLoading(false);
-          setMessage({ type: "error", text: "Only admins can log in." });
-          return;
-        }
+        // if (user.email !== "sultanabaniks@gmail.com") {
+        //   setLoading(false);
+        //   setMessage({ type: "error", text: "Only admins can log in." });
+        //   return;
+        // }
 
         console.log("Admin signed in:", user);
         setMessage({ type: "success", text: "Admin signed in successfully!" });
