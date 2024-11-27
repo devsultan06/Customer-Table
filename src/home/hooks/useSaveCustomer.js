@@ -1,6 +1,6 @@
 // useSaveCustomer.js
 import { addDoc, collection } from "firebase/firestore";
-import { db } from "../../firebase/config/index"; 
+import { db } from "../../firebase/config/index";
 import { useContext } from "react";
 import { AuthContext } from "../../context/AuthContext";
 
@@ -11,7 +11,7 @@ const useSaveCustomer = (
   setAlert,
   setCustomers,
   setLoading,
-  handleCloseModal
+  handleCloseAddStaffModal
 ) => {
   const { currentUser } = useContext(AuthContext);
 
@@ -45,8 +45,8 @@ const useSaveCustomer = (
         balance: "",
         deposit: "",
       });
-
-      handleCloseModal();
+ 
+      handleCloseAddStaffModal();
       fetchCustomers();
 
       setAlert({

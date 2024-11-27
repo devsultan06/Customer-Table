@@ -38,9 +38,10 @@ import ViewModal from "./components/ViewModal";
 import ConfirmDeleteModal from "./components/ConfirmDeleteModal";
 
 function descendingComparator(a, b, orderBy) {
-  if (b[orderBy] < a[orderBy]) return -1;
-  if (b[orderBy] > a[orderBy]) return 1;
-  return 0;
+  if (typeof a[orderBy] === "string" && typeof b[orderBy] === "string") {
+    return b[orderBy].localeCompare(a[orderBy]); // Case-insensitive sorting for strings
+  }
+  return b[orderBy] < a[orderBy] ? -1 : b[orderBy] > a[orderBy] ? 1 : 0;
 }
 
 function getComparator(order, orderBy) {
@@ -168,7 +169,7 @@ export default function Home() {
   };
 
   const handleCloseAddStaffModal = () => {
-    setAddStaffModalOpen(true);
+    setAddStaffModalOpen(false);
   };
 
   const handleOpenViewModal = () => {

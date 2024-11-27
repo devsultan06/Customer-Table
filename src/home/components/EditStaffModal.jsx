@@ -176,7 +176,7 @@ function EditStaffModal({
               width="30"
               ariaLabel="color-ring-loading"
               wrapperStyle={{}}
-              colors={["#316bf3", "#316bf3", "#316bf3", "#316bf3", "#316bf3"]}
+              colors={["#fff", "#fff", "#fff", "#fff", "#fff"]}
             />
           ) : (
             "Update"

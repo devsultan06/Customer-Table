@@ -1,4 +1,4 @@
-import React, { useMemo} from "react";
+import React, { useMemo } from "react";
 import {
   Modal,
   Box,
@@ -80,8 +80,8 @@ function AddStaffModal({
           >
             <MenuItem value="Open">Open</MenuItem>
             <MenuItem value="Inactive">Inactive</MenuItem>
-            <MenuItem value="Due">Due</MenuItem> 
-            <MenuItem value="Paid">Paid</MenuItem> 
+            <MenuItem value="Due">Due</MenuItem>
+            <MenuItem value="Paid">Paid</MenuItem>
           </Select>
         </FormControl>
 
@@ -126,7 +126,7 @@ function AddStaffModal({
           variant="contained"
           color="primary"
           onClick={handleSaveCustomer}
-          disabled={!isFormValid}
+          disabled={!isFormValid || loading}
           sx={{ mr: 2 }}
         >
           {loading ? (
@@ -136,7 +136,7 @@ function AddStaffModal({
               width="30"
               ariaLabel="color-ring-loading"
               wrapperStyle={{}}
-              colors={["#316bf3", "#316bf3", "#316bf3", "#316bf3", "#316bf3"]}
+              colors={["#fff", "#fff", "#fff", "#fff", "#fff"]}
             />
           ) : (
             "Save"
