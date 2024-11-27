@@ -20,12 +20,12 @@ import {
 } from "@mui/material";
 import AddIcon from "@mui/icons-material/Add";
 import { visuallyHidden } from "@mui/utils";
-import { db } from "../firebase/config/index"; // Update with your Firebase config path
+import { db } from "../firebase/config/index";
 import { ColorRing } from "react-loader-spinner";
 import AlertMessage from "./components/MessageBox";
 import LogoutIcon from "@mui/icons-material/Logout";
 import { deleteDoc, doc, updateDoc } from "firebase/firestore";
-import useExportToExcel from "./hooks/useExportToExcel"; // Import the custom hook
+import useExportToExcel from "./hooks/useExportToExcel";
 import ActionMenu from "./components/ActionMenu";
 import AddStaffModal from "./components/AddStaffModal";
 import useFetchCustomers from "./hooks/useFetchCustomers";
@@ -35,6 +35,7 @@ import useLogout from "./hooks/useLogOut";
 import EditStaffModal from "./components/EditStaffModal";
 import useUpdateCustomer from "./hooks/useUpdateCustomer";
 import ViewModal from "./components/ViewModal";
+import ConfirmDeleteModal from "./components/ConfirmDeleteModal";
 
 function descendingComparator(a, b, orderBy) {
   if (b[orderBy] < a[orderBy]) return -1;
@@ -91,17 +92,19 @@ export default function Home() {
   const [dense, setDense] = useState(false);
   const [rowsPerPage, setRowsPerPage] = useState(5);
   const [loading, setLoading] = useState(false);
-  const [modalOpen, setModalOpen] = useState(false);
-  const [searchQuery, setSearchQuery] = useState(""); // Search query state
+  const [addstaffmodalOpen, setAddStaffModalOpen] = useState(false);
+  const [editmodalOpen, setEditModalOpen] = useState(false);
+  const [viewmodalOpen, setViewModalOpen] = useState(false);
+  const [deleteModal, setDeleteOpen] = useState(false);
+  const [searchQuery, setSearchQuery] = useState("");
   const [alert, setAlert] = useState({
     severity: "",
     message: "",
     open: false,
-  }); // Alert state
+  });
 
   const [menuAnchor, setMenuAnchor] = useState(null); // State to track menu open/close
   const [selectedCustomer, setSelectedCustomer] = useState(null); // Track the customer for dropdown actions
-
   const [newCustomer, setNewCustomer] = useState({
     name: "",
     description: "",
@@ -110,10 +113,6 @@ export default function Home() {
     balance: "",
     deposit: "",
   });
-  const { customers, fetchCustomers, setCustomers } = useFetchCustomers(
-    setLoading,
-    setAlert
-  );
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -121,10 +120,10 @@ export default function Home() {
   };
 
   const statusColors = {
-    Open: { backgroundColor: "#F0F1FA", textColor: "#4F5AED" }, // Open - Slightly darker green for text
-    Inactive: { backgroundColor: "#E9EDF5", textColor: "#5A6376" }, // Inactive - Neutral gray tones
-    Due: { backgroundColor: "#FAF0F3", textColor: "#D12953" }, // Due - Darker orange for text
-    Paid: { backgroundColor: "#E1FCEF", textColor: "#14804A" }, // Paid - Deep blue for text
+    Open: { backgroundColor: "#F0F1FA", textColor: "#4F5AED" },
+    Inactive: { backgroundColor: "#E9EDF5", textColor: "#5A6376" },
+    Due: { backgroundColor: "#FAF0F3", textColor: "#D12953" },
+    Paid: { backgroundColor: "#E1FCEF", textColor: "#14804A" },
   };
 
   const handleRequestSort = (event, property) => {
@@ -137,6 +136,11 @@ export default function Home() {
     setDense(event.target.checked);
   };
 
+  const { customers, fetchCustomers, setCustomers } = useFetchCustomers(
+    setLoading,
+    setAlert
+  );
+
   const filteredCustomers = useMemo(() => {
     return customers.filter((customer) =>
       customer.name.toLowerCase().includes(searchQuery.toLowerCase())
@@ -146,29 +150,6 @@ export default function Home() {
   useEffect(() => {
     fetchCustomers();
   }, []);
-
-  const [editmodalOpen, setEditModalOpen] = useState(false);
-  const [viewmodalOpen, setViewModalOpen] = useState(false);
-
-  const handleOpenModal = () => {
-    setModalOpen(true); // Open the modal
-  };
-
-  const handleCloseModal = () => {
-    setModalOpen(false); // Close the modal
-  };
-
-  const { handleSaveCustomer } = useSaveCustomer(
-    newCustomer,
-    setNewCustomer,
-    fetchCustomers,
-    setAlert,
-    setCustomers,
-    setLoading,
-    handleCloseModal
-  );
-
-  const { handleLogout } = useLogout();
 
   const handleMenuOpen = (event, customer) => {
     console.log("Menu opened for customer", customer);
@@ -181,6 +162,55 @@ export default function Home() {
     setMenuAnchor(null);
     setSelectedCustomer(null);
   };
+
+  const handleOpenAddStaffModal = () => {
+    setAddStaffModalOpen(true);
+  };
+
+  const handleCloseAddStaffModal = () => {
+    setAddStaffModalOpen(true);
+  };
+
+  const handleOpenViewModal = () => {
+    setViewModalOpen(true);
+    console.log("Editing", selectedCustomer);
+  };
+
+  const handleCloseViewModal = () => {
+    setViewModalOpen(false);
+    handleMenuClose();
+  };
+
+  const handleOpenEditModal = () => {
+    setEditModalOpen(true);
+    console.log("Editing", selectedCustomer);
+  };
+
+  const handleCloseEditModal = () => {
+    setEditModalOpen(false);
+    handleMenuClose();
+  };
+
+  const handleOpenDeleteModal = () => {
+    setDeleteOpen(true);
+  };
+
+  const handleCloseDeleteModal = () => {
+    setDeleteOpen(false);
+    handleMenuClose();
+  };
+
+  const { handleSaveCustomer } = useSaveCustomer(
+    newCustomer,
+    setNewCustomer,
+    fetchCustomers,
+    setAlert,
+    setCustomers,
+    setLoading,
+    handleCloseAddStaffModal
+  );
+
+  const { handleLogout } = useLogout();
 
   const handleDelete = async () => {
     console.log(`Delete clicked for customer`, selectedCustomer);
@@ -205,7 +235,7 @@ export default function Home() {
         message: "Customer deleted successfully!",
         open: true,
       });
-      fetchCustomers(); // Assuming this fetches the updated list of customers
+      fetchCustomers(); // fetches the updated list of customers
     } catch (error) {
       console.error("Error deleting customer:", error);
     } finally {
@@ -214,18 +244,10 @@ export default function Home() {
 
     // Close the menu after handling the action
     handleMenuClose();
+    handleCloseDeleteModal();
   };
 
-  const exportToExcel = useExportToExcel(customers, setAlert); // Call the custom hook
-
-  const handleOpenEditModal = () => {
-    setEditModalOpen(true); // Open the modal
-    console.log("Editing", selectedCustomer);
-  };
-
-  const handleCloseEditModal = () => {
-    setEditModalOpen(false); // Close the modal
-  };
+  const exportToExcel = useExportToExcel(customers, setAlert);
 
   const { handleEdit } = useUpdateCustomer(
     setLoading,
@@ -233,16 +255,7 @@ export default function Home() {
     fetchCustomers,
     handleCloseEditModal,
     handleMenuClose
-  ); // Use the custom hook
-
-  const handleOpenViewModal = () => {
-    setViewModalOpen(true); // Open the modal
-    console.log("Editing", selectedCustomer);
-  };
-
-  const handleCloseViewModal = () => {
-    setViewModalOpen(false); // Close the modal
-  };
+  );
 
   return (
     <Box sx={{ width: "100%", padding: "20px" }}>
@@ -280,7 +293,7 @@ export default function Home() {
           />
           <Button
             variant="contained"
-            onClick={exportToExcel} // Attach the export function to this button
+            onClick={exportToExcel}
             sx={{
               marginRight: "10px",
             }}
@@ -342,7 +355,7 @@ export default function Home() {
               ) : (
                 filteredCustomers
                   .sort(getComparator(order, orderBy)) // Sort the full data set
-                  .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage) // Then slice for the current page
+                  .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage) // Paginate the data
                   .map((customer, index) => (
                     <TableRow
                       hover
@@ -358,7 +371,6 @@ export default function Home() {
                       <TableCell>
                         <h1>{customer.name}</h1>
                         <p style={{ fontSize: "0.8rem" }}>{customer.id}</p>{" "}
-                        {/* Smaller paragraph */}
                       </TableCell>
                       <TableCell
                         sx={{
@@ -387,17 +399,14 @@ export default function Home() {
                       <TableCell>
                         <h1>${customer.rate}</h1>
                         <p style={{ fontSize: "0.8rem" }}>CAD</p>{" "}
-                        {/* Smaller paragraph */}
                       </TableCell>{" "}
                       <TableCell>
                         <h1>${customer.balance}</h1>
                         <p style={{ fontSize: "0.8rem" }}>CAD</p>{" "}
-                        {/* Smaller paragraph */}
                       </TableCell>{" "}
                       <TableCell>
                         <h1>${customer.deposit}</h1>
                         <p style={{ fontSize: "0.8rem" }}>CAD</p>{" "}
-                        {/* Smaller paragraph */}
                       </TableCell>{" "}
                       <TableCell>
                         <ActionMenu
@@ -407,7 +416,7 @@ export default function Home() {
                             handleMenuOpen(event, customer)
                           }
                           handleMenuClose={handleMenuClose}
-                          handleDelete={handleDelete}
+                          handleOpenDeleteModal={handleOpenDeleteModal}
                           loading={loading}
                           handleOpenEditModal={handleOpenEditModal}
                           handleOpenViewModal={handleOpenViewModal}
@@ -439,17 +448,17 @@ export default function Home() {
         variant="contained"
         startIcon={<AddIcon />}
         sx={{ mb: 2, float: "right" }}
-        onClick={handleOpenModal}
+        onClick={handleOpenAddStaffModal}
       >
         Add Customer
       </Button>
       {/* Modal for Adding Customer */}
       <AddStaffModal
-        open={modalOpen}
-        handleClose={handleCloseModal}
+        open={addstaffmodalOpen}
+        handleClose={handleCloseAddStaffModal}
         handleSaveCustomer={handleSaveCustomer}
         loading={loading}
-        handleCloseModal={handleCloseModal}
+        handleCloseModal={handleCloseAddStaffModal}
         newCustomer={newCustomer}
         handleInputChange={handleInputChange}
       />
@@ -467,9 +476,14 @@ export default function Home() {
         handleCloseModal={handleCloseViewModal}
         selectedCustomer={selectedCustomer}
       />
-      {/* Alert Component */}
+      <ConfirmDeleteModal
+        open={deleteModal}
+        onClose={handleCloseDeleteModal}
+        onConfirm={handleDelete}
+        customerName={selectedCustomer?.name}
+        loading={loading}
+      />
       <AlertMessage alert={alert} setAlert={setAlert} />{" "}
-      {/* Include the alert message */}{" "}
     </Box>
   );
 }

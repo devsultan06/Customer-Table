@@ -1,7 +1,5 @@
-// useUpdateCustomer.js
-import { useState } from "react";
 import { doc, serverTimestamp, updateDoc } from "firebase/firestore";
-import { db } from "../../firebase/config/index"; // Import your Firebase config
+import { db } from "../../firebase/config/index"; 
 
 const useUpdateCustomer = (
   setLoading,

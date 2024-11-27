@@ -13,7 +13,7 @@ const ActionMenu = ({
   open,
   handleMenuOpen,
   handleMenuClose,
-  handleDelete,
+  handleOpenDeleteModal,
   loading,
   handleOpenEditModal,
   handleOpenViewModal,
@@ -42,25 +42,14 @@ const ActionMenu = ({
         </MenuItem>
 
         {currentUser.email === "sultanabaniks@gmail.com" && (
-          <MenuItem onClick={handleDelete} sx={{ color: "#DC4067" }}>
-            {loading ? (
-              <ColorRing
-                visible={true}
-                height="30"
-                width="30"
-                ariaLabel="color-ring-loading"
-                wrapperStyle={{}}
-                colors={["#316bf3", "#316bf3", "#316bf3", "#316bf3", "#316bf3"]}
-              />
-            ) : (
-              <Button
-                color="error"
-                sx={{ display: "flex", alignItems: "center" }}
-              >
-                Delete
-                <DeleteIcon sx={{ marginLeft: "10px" }} />
-              </Button>
-            )}
+          <MenuItem onClick={handleOpenDeleteModal} sx={{ color: "#DC4067" }}>
+            <Button
+              color="error"
+              sx={{ display: "flex", alignItems: "center" }}
+            >
+              Delete
+              <DeleteIcon sx={{ marginLeft: "10px" }} />
+            </Button>
           </MenuItem>
         )}
       </Menu>

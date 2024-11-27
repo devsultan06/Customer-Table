@@ -14,7 +14,7 @@ const DashBoard = () => {
     navigate("/home");
   };
 
-  if (currentUser.email === "sultanabaniks@gmail.com") {
+  if (currentUser.email !== "sultanabaniks@gmail.com") {
     return (
       <div className="flex flex-col h-screen w-full justify-center items-center">
         <h1>What are you looking for here?</h1>

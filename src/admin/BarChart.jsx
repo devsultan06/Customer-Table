@@ -19,11 +19,24 @@ ChartJS.register(
 );
 
 const data = {
-  labels: ["January", "February", "March", "April", "May", "June", "July"],
+  labels: [
+    "January",
+    "February",
+    "March",
+    "April",
+    "May",
+    "June",
+    "July",
+    "August",
+    "September",
+    "October",
+    "November",
+    "December",
+  ],
   datasets: [
     {
       label: "Sample Data",
-      data: [65, 59, 80, 81, 56, 55, 40],
+      data: [65, 59, 80, 81, 56, 55, 40, 20, 10, 30, 50, 70],
       backgroundColor: [
         "rgba(255, 99, 132, 0.2)",
         "rgba(54, 162, 235, 0.2)",
