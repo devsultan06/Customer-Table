@@ -18,8 +18,8 @@ const ConfirmDeleteModal = ({
           top: "50%",
           left: "50%",
           transform: "translate(-50%, -50%)",
-          width: { xs: "90%", sm: "70%", md: "50%" }, // Responsive width
-          maxWidth: "500px", // Maximum width
+          width: { xs: "90%", sm: "70%", md: "50%" }, 
+          maxWidth: "500px", 
           backgroundColor: "white",
           padding: "30px",
           borderRadius: "12px",
@@ -32,7 +32,7 @@ const ConfirmDeleteModal = ({
           sx={{
             marginBottom: "20px",
             fontWeight: "bold",
-            color: "#d32f2f", // Emphasized red color for warning
+            color: "#d32f2f", 
           }}
         >
           Confirm Deletion
@@ -90,7 +90,7 @@ const ConfirmDeleteModal = ({
             sx={{
               padding: "10px 20px",
               fontSize: "16px",
-              borderColor: "#1976d2", // Blue border for cancel button
+              borderColor: "#1976d2", 
               "&:hover": { backgroundColor: "#f0f0f0" },
             }}
           >

@@ -1,7 +1,6 @@
 // useExportToExcel.js
 import * as XLSX from "xlsx";
 
-// Custom hook to export data to Excel
 const useExportToExcel = (customers, setAlert) => {
   const exportToExcel = () => {
     if (!customers.length) {

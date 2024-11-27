@@ -5,11 +5,10 @@ import TextField from "@mui/material/TextField";
 import Button from "@mui/material/Button";
 import ClipLoader from "react-spinners/ClipLoader";
 import { signInWithEmailAndPassword } from "firebase/auth";
-import { auth } from "../firebase/config"; // Adjust the path as necessary
+import { auth } from "../firebase/config"; 
 import { useNavigate } from "react-router-dom";
 import MessageBox from "./MessageBox";
 import Theme from "../components/Theme";
-import useThemeMode from "../hooks/useThemeMode";
 
 const Auth = () => {
   const [loading, setLoading] = useState(false);
@@ -48,7 +47,7 @@ const Auth = () => {
         formik.resetForm();
         setTimeout(() => {
           navigate("/home");
-        }, 2000); // Delay of 2 seconds before navigating
+        }, 2000); 
       } catch (error) {
         setMessage({ type: "error", text: error.message });
         console.error("Error signing in:", error);

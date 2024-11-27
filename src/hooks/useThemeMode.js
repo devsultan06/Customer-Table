@@ -1,10 +1,10 @@
+//useThemeMode.js
 import { useState, useEffect } from "react";
 
 const useThemeMode = () => {
   const [theme, setTheme] = useState(() => {
-    // Get the theme from localStorage or default to "light"
     const savedTheme = localStorage.getItem("theme") || "light";
-    document.documentElement.classList.add(savedTheme); // Apply theme immediately
+    document.documentElement.classList.add(savedTheme);
     return savedTheme;
   });
 
@@ -16,7 +16,6 @@ const useThemeMode = () => {
   };
 
   useEffect(() => {
-    // This ensures the <html> element always has the current theme class
     document.documentElement.classList.remove("dark", "light");
     document.documentElement.classList.add(theme);
   }, [theme]);

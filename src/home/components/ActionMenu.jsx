@@ -5,7 +5,6 @@ import MoreVertIcon from "@mui/icons-material/MoreVert";
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
 import ErrorOutlineIcon from "@mui/icons-material/ErrorOutline";
-import { ColorRing } from "react-loader-spinner"; // Assuming this is the correct import for your loading spinner
 import { AuthContext } from "../../context/AuthContext";
 
 const ActionMenu = ({
@@ -14,7 +13,6 @@ const ActionMenu = ({
   handleMenuOpen,
   handleMenuClose,
   handleOpenDeleteModal,
-  loading,
   handleOpenEditModal,
   handleOpenViewModal,
 }) => {

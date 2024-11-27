@@ -1,6 +1,6 @@
 import React from "react";
 import { IconButton } from "@mui/material";
-import { Brightness4, LightMode } from "@mui/icons-material"; // Use appropriate icons
+import { Brightness4, LightMode } from "@mui/icons-material"; 
 import useThemeMode from "../hooks/useThemeMode";
 
 const Theme = () => {

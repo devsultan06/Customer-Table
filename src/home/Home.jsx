@@ -417,7 +417,6 @@ export default function Home() {
                           }
                           handleMenuClose={handleMenuClose}
                           handleOpenDeleteModal={handleOpenDeleteModal}
-                          loading={loading}
                           handleOpenEditModal={handleOpenEditModal}
                           handleOpenViewModal={handleOpenViewModal}
                         />{" "}

@@ -1,6 +1,6 @@
 // useSaveCustomer.js
 import { addDoc, collection } from "firebase/firestore";
-import { db } from "../../firebase/config/index"; // Adjust this import to your Firebase setup
+import { db } from "../../firebase/config/index"; 
 import { useContext } from "react";
 import { AuthContext } from "../../context/AuthContext";
 
@@ -18,7 +18,7 @@ const useSaveCustomer = (
   const handleSaveCustomer = async () => {
     setLoading(true);
     const currentDate = new Date();
-    const formattedDate = currentDate.toLocaleDateString(); // Output: "11/25/2024"
+    const formattedDate = currentDate.toLocaleDateString();
     const createdBy = currentUser.email;
     try {
       const customerToSave = {
@@ -37,7 +37,6 @@ const useSaveCustomer = (
         { ...newCustomer, id: docRef.id },
       ]);
 
-      // Reset newCustomer state after successful save
       setNewCustomer({
         name: "",
         description: "",

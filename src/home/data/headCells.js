@@ -1,7 +1,5 @@
-// headCells.js
-
 const headCells = [
-  { id: "index", label: "#" }, // Ensure the ID matches the column logic
+  { id: "index", label: "#" },
   { id: "name", label: "Name" },
   { id: "description", label: "Description" },
   { id: "status", label: "Status" },

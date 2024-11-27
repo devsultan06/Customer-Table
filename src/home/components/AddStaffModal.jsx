@@ -1,4 +1,4 @@
-import React, { useMemo, useState } from "react";
+import React, { useMemo} from "react";
 import {
   Modal,
   Box,
@@ -80,8 +80,8 @@ function AddStaffModal({
           >
             <MenuItem value="Open">Open</MenuItem>
             <MenuItem value="Inactive">Inactive</MenuItem>
-            <MenuItem value="Due">Due</MenuItem> {/* Changed value */}
-            <MenuItem value="Paid">Paid</MenuItem> {/* Changed value */}
+            <MenuItem value="Due">Due</MenuItem> 
+            <MenuItem value="Paid">Paid</MenuItem> 
           </Select>
         </FormControl>
 

@@ -1,6 +1,6 @@
-import React, { createContext, useContext, useState, useEffect } from "react";
+import React, { createContext,useState, useEffect } from "react";
 import { onAuthStateChanged } from "firebase/auth";
-import { auth } from "../firebase/config"; // Adjust the path as necessary
+import { auth } from "../firebase/config"; 
 import { ColorRing } from "react-loader-spinner";
 
 // Create a context
@@ -9,7 +9,7 @@ const AuthContext = createContext();
 // Create a provider component
 const AuthProvider = ({ children }) => {
   const [currentUser, setCurrentUser] = useState(null);
-  const [loading, setLoading] = useState(true); // Track loading state
+  const [loading, setLoading] = useState(true); // Set loading to true on initial render	
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (user) => {

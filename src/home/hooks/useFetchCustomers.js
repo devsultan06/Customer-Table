@@ -1,5 +1,4 @@
 // useFetchCustomers.js
-
 import { useState } from "react";
 import { collection, getDocs } from "firebase/firestore";
 import { db } from "../../firebase/config/index"; // Adjust this import to your Firebase setup

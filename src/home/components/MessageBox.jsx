@@ -3,18 +3,15 @@ import { Snackbar, Alert } from "@mui/material";
 
 const MessageBox = ({ alert, setAlert }) => {
   const handleClose = () => {
-    console.log("Closing alert");
     setAlert((prev) => ({ ...prev, open: false }));
   };
 
   useEffect(() => {
     if (alert.open) {
-      console.log("Alert opened:", alert.message);
       const timer = setTimeout(() => {
         handleClose();
       }, 3000);
       return () => {
-        console.log("Cleaning up timer");
         clearTimeout(timer); // Clean up timer on component unmount
       };
     }
