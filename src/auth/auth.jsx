@@ -5,7 +5,7 @@ import TextField from "@mui/material/TextField";
 import Button from "@mui/material/Button";
 import ClipLoader from "react-spinners/ClipLoader";
 import { signInWithEmailAndPassword } from "firebase/auth";
-import { auth } from "../firebase/config"; 
+import { auth } from "../firebase/config";
 import { useNavigate } from "react-router-dom";
 import MessageBox from "./MessageBox";
 import Theme from "../components/Theme";
@@ -45,9 +45,7 @@ const Auth = () => {
         console.log("Admin signed in:", user);
         setMessage({ type: "success", text: "Admin signed in successfully!" });
         formik.resetForm();
-        setTimeout(() => {
-          navigate("/home");
-        }, 2000); 
+        navigate("/home");
       } catch (error) {
         setMessage({ type: "error", text: error.message });
         console.error("Error signing in:", error);
