@@ -12,6 +12,8 @@
   "dependencies": {
     "@emotion/react": "^11.13.5",
     "@emotion/styled": "^11.13.5",
+    "@heroicons/react": "^2.2.0",
+    "@material-tailwind/react": "^2.1.10",
     "@mui/icons-material": "^6.1.8",
     "@mui/material": "^6.1.8",
     "@mui/styled-engine-sc": "^6.1.8",
