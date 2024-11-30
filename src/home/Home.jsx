@@ -23,7 +23,7 @@ import { visuallyHidden } from "@mui/utils";
 import { db } from "../firebase/config/index";
 import { ColorRing } from "react-loader-spinner";
 import AlertMessage from "./components/MessageBox";
-import { deleteDoc, doc} from "firebase/firestore";
+import { deleteDoc, doc } from "firebase/firestore";
 import useExportToExcel from "./hooks/useExportToExcel";
 import ActionMenu from "./components/ActionMenu";
 import AddStaffModal from "./components/AddStaffModal";
@@ -36,7 +36,7 @@ import useUpdateCustomer from "./hooks/useUpdateCustomer";
 import ViewModal from "./components/ViewModal";
 import ConfirmDeleteModal from "./components/ConfirmDeleteModal";
 import UserMenu from "./components/UserMenu";
-import { AuthContext } from "../context/AuthContext";
+import useCurrentUser from "../hooks/useCurrentUser";
 
 function descendingComparator(a, b, orderBy) {
   if (typeof a[orderBy] === "string" && typeof b[orderBy] === "string") {
@@ -116,7 +116,8 @@ export default function Home() {
     deposit: "",
   });
 
-  const { currentUser } = useContext(AuthContext);
+  const currentUser = useCurrentUser();
+
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
