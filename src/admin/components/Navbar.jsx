@@ -50,7 +50,6 @@ export function ComplexNavbar({ isOpen, toggleSidebar, closeSidebar }) {
           <ProfileMenu />
         </div>{" "}
       </div>
-      <hr className="my-2 border-blue-gray-200 w-auto" />
     </>
   );
 }
