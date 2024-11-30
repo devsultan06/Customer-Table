@@ -1,5 +1,5 @@
 // profile menu component
-import React, { useState, useEffect } from "react";
+import React, { useState,}from "react";
 import {
   Typography,
   Menu,
@@ -32,7 +32,7 @@ const profileMenuItems = [
 ];
 
 export function ProfileMenu() {
-  const [isMenuOpen, setIsMenuOpen] = React.useState(false);
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
 
   const closeMenu = () => setIsMenuOpen(false);
 

@@ -30,7 +30,7 @@ import AddStaffModal from "./components/AddStaffModal";
 import useFetchCustomers from "./hooks/useFetchCustomers";
 import headCells from "./data/headCells";
 import useSaveCustomer from "./hooks/useSaveCustomer";
-import useLogout from "./hooks/useLogOut";
+import useLogout from "../hooks/useLogOut";
 import EditStaffModal from "./components/EditStaffModal";
 import useUpdateCustomer from "./hooks/useUpdateCustomer";
 import ViewModal from "./components/ViewModal";

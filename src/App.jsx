@@ -5,6 +5,12 @@ import Home from "./home/Home.jsx";
 import { AuthProvider } from "./context/AuthContext.jsx";
 import ProtectedRoute from "./routes/ProtectedRoute.jsx";
 import Admin from "./admin/Admin.jsx";
+import Customers from "./admin/pages/customers/Customers.jsx";
+import Roles from "./admin/pages/roles/Roles.jsx";
+import Settings from "./admin/pages/settings/Settings.jsx";
+import Inbox from "./admin/pages/inbox/Inbox.jsx";
+import Profile from "./admin/pages/profile/Profile.jsx";
+import Dashboard from './admin/pages/dashboard/dashboard.jsx'
 
 const App = () => {
   return (
@@ -28,7 +34,15 @@ const App = () => {
                 <Admin />
               </ProtectedRoute>
             }
-          />
+          >
+            <Route path="dashboard" element={<Dashboard />} />
+            <Route path="customers" element={<Customers />} />
+            <Route path="roles" element={<Roles />} />
+            <Route path="settings" element={<Settings />} />
+            <Route path="inbox" element={<Inbox />} />
+            <Route path="profile" element={<Profile />} />
+            <Route path="" element={<Navigate to="dashboard" replace />} />
+          </Route>
         </Routes>
       </BrowserRouter>
     </AuthProvider>
