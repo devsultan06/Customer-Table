@@ -31,7 +31,7 @@ export function ComplexNavbar({ isOpen, toggleSidebar, closeSidebar }) {
   };
   return (
     <>
-      <div className="relative mx-auto flex items-center justify-between text-blue-gray-900 p-[10px]">
+      <div className="fixed mx-auto z-40 w-full bg-[#f5f5f5] right-0 flex items-center justify-between text-blue-gray-900 p-[10px] ">
         <div className="md:hidden">
           <MenuIcon
             className="fixed top-4 left-4 text-[400px] rounded-md cursor-pointer"

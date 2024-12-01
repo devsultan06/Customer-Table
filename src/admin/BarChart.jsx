@@ -35,7 +35,6 @@ const data = {
   ],
   datasets: [
     {
-      label: "Sample Data",
       data: [65, 59, 80, 81, 56, 55, 40, 20, 10, 30, 50, 70],
       backgroundColor: [
         "rgba(255, 99, 132, 0.2)",
@@ -66,11 +65,7 @@ const BarChart = () => {
     maintainAspectRatio: false, // Allow the chart to resize dynamically
     plugins: {
       legend: {
-        position: "top",
-      },
-      title: {
-        display: true,
-        text: "Sample Linear Chart",
+        display: false,
       },
     },
     scales: {

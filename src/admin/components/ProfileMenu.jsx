@@ -67,7 +67,12 @@ export function ProfileMenu() {
               </Typography>
             </MenuItem>
           ) : (
-            <Link to={to} key={label} onClick={closeMenu} className="block">
+            <Link
+              to={to}
+              key={label}
+              onClick={closeMenu}
+              className="block focus:outline-none"
+            >
               <MenuItem className="flex items-center gap-2 rounded">
                 {React.createElement(icon, {
                   className: "h-4 w-4",
