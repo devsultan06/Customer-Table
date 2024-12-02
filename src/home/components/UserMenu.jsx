@@ -4,8 +4,10 @@ import {
   Logout as LogoutIcon,
   AccountCircle as AccountCircleIcon,
 } from "@mui/icons-material";
+import { useNavigate } from "react-router-dom";
 
 export default function UserMenu({ email, handleLogout }) {
+  const navigate = useNavigate();
   const [anchorEl, setAnchorEl] = useState(null);
 
   const handleClick = (event) => {
@@ -14,6 +16,10 @@ export default function UserMenu({ email, handleLogout }) {
 
   const handleClose = () => {
     setAnchorEl(null);
+  };
+
+  const handleClickAdmin = () => {
+    navigate("/admin");
   };
 
   return (
@@ -49,6 +55,17 @@ export default function UserMenu({ email, handleLogout }) {
         >
           {email}
         </MenuItem>
+        <Button
+          onClick={handleClickAdmin}
+          variant="contained"
+          sx={{
+            marginLeft: "15px",
+            marginBottom: "15px",
+          }}
+        >
+          Go to Admin
+        </Button>
+        <br />
         <Button
           onClick={handleLogout}
           variant="contained"

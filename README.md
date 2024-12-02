@@ -13,12 +13,13 @@ This project is a customer management system that allows you to view, update, ad
 
 ## Technologies Used
 
-- React
-- Firebase
-- Material-UI
-- react-chartjs-2
-- react-loader-spinner
-- xlxs
+- **React**: For building the user interface.
+- **Firebase**: Backend operations, including user authentication and data management.
+- **Material-UI**: For designing modern and responsive UI components.
+- **Material-Tailwind**: Enhanced styling using TailwindCSS utilities.
+- **react-chartjs-2**: For visualizing data using interactive charts.
+- **react-loader-spinner**: Loading indicators during data fetching.
+- **xlsx**: For data export in Excel-compatible formats.
 
 ## Installation
 

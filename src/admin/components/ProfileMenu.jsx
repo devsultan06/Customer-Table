@@ -11,6 +11,7 @@ import {
   InboxArrowDownIcon,
   PowerIcon,
 } from "@heroicons/react/24/solid";
+import HomeIcon from "@mui/icons-material/Home";
 import { AccountCircle as AccountCircleIcon } from "@mui/icons-material";
 import { Link } from "react-router-dom";
 import useLogout from "../../hooks/useLogOut";
@@ -25,6 +26,11 @@ const profileMenuItems = [
     label: "Inbox",
     icon: InboxArrowDownIcon,
     to: "/admin/inbox",
+  },
+  {
+    label: "Home",
+    icon: HomeIcon,
+    to: "/home",
   },
   {
     label: "Sign Out",
