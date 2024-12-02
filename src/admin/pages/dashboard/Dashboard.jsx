@@ -2,6 +2,7 @@ import { CardWithLink } from "./components/CardWithLink";
 import BarChart from "./../../BarChart";
 
 const Dashboard = () => {
+
   return (
     <div className="dashboard">
       <div className="cards">

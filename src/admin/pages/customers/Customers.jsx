@@ -1,36 +1,12 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { Button, Input } from "@material-tailwind/react"; // Import Material Tailwind components
-import { collection, getDocs } from "firebase/firestore";
-import { db } from "../../../firebase/config";
 import { ColorRing } from "react-loader-spinner";
 import useExportToExcel from "../../../home/hooks/useExportToExcel";
+import { useCustomerContext } from "../../../context/CustomerContext";
 
 const Customers = () => {
   const [search, setSearch] = useState(""); // Search term state
-  const [customers, setCustomers] = useState([]);
-  const [loading, setLoading] = useState(true); // Loading state
-
-  const fetchCustomers = async () => {
-    setLoading(true); // Start loader
-    try {
-      const querySnapshot = await getDocs(collection(db, "customers"));
-      const customerData = querySnapshot.docs.map((doc) => ({
-        id: doc.id,
-        ...doc.data(),
-      }));
-      setCustomers(customerData);
-    } catch (err) {
-      console.error("Error fetching customers:", err);
-      setCustomers([]); // Ensure no data remains when there's an error
-    } finally {
-      setLoading(false); // Stop loader
-    }
-  };
-
-  useEffect(() => {
-    fetchCustomers();
-  }, []);
-
+  const { customers, loading } = useCustomerContext();
   // Filter customers based on the search term
   const filteredCustomers = customers.filter((customer) =>
     customer.name.toLowerCase().includes(search.toLowerCase())
@@ -39,7 +15,7 @@ const Customers = () => {
   const exportToExcel = useExportToExcel(customers);
 
   return (
-    <div className="min-h-screen flex flex-col">
+    <div className="min-h-screen overflow-y-hidden">
       {/* Header Section */}
       <div className="block md:flex justify-between items-center mb-4">
         <h1 className="text-2xl font-semibold text-gray-700">Customers</h1>

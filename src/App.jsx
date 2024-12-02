@@ -10,7 +10,7 @@ import Roles from "./admin/pages/roles/Roles.jsx";
 import Settings from "./admin/pages/settings/Settings.jsx";
 import Inbox from "./admin/pages/inbox/Inbox.jsx";
 import Profile from "./admin/pages/profile/Profile.jsx";
-import Dashboard from './admin/pages/dashboard/Dashboard.jsx';
+import Dashboard from "./admin/pages/dashboard/Dashboard.jsx";
 
 const App = () => {
   return (

@@ -5,40 +5,41 @@ import {
   DocumentIcon,
   ListBulletIcon,
 } from "@heroicons/react/24/solid";
-
-const cardData = [
-  {
-    id: 1,
-    title: "Budget",
-    value: "$24k",
-    icon: <CurrencyDollarIcon className="h-6 w-6" />,
-    iconBg: "bg-blue-100 text-blue-600",
-  },
-  {
-    id: 2,
-    title: "Total Customers",
-    value: "1.6k",
-    icon: <UserGroupIcon className="h-6 w-6" />,
-    iconBg: "bg-green-100 text-green-600",
-  },
-  {
-    id: 3,
-    title: "Task Progress",
-    value: "75%",
-    icon: <ListBulletIcon className="h-6 w-6" />,
-    iconBg: "bg-orange-100 text-orange-600",
-    progress: true,
-  },
-  {
-    id: 4,
-    title: "Total Profit",
-    value: "$15k",
-    icon: <DocumentIcon className="h-6 w-6" />,
-    iconBg: "bg-blue-100 text-blue-600",
-  },
-];
+import { useCustomerContext } from "../../../../context/CustomerContext";
 
 export function CardWithLink() {
+  const { totalCustomer } = useCustomerContext();
+  const cardData = [
+    {
+      id: 1,
+      title: "Budget",
+      value: "$24k",
+      icon: <CurrencyDollarIcon className="h-6 w-6" />,
+      iconBg: "bg-blue-100 text-blue-600",
+    },
+    {
+      id: 2,
+      title: "Total Customers",
+      value: totalCustomer ? totalCustomer : "",
+      icon: <UserGroupIcon className="h-6 w-6" />,
+      iconBg: "bg-green-100 text-green-600",
+    },
+    {
+      id: 3,
+      title: "Task Progress",
+      value: "75%",
+      icon: <ListBulletIcon className="h-6 w-6" />,
+      iconBg: "bg-orange-100 text-orange-600",
+      progress: true,
+    },
+    {
+      id: 4,
+      title: "Total Profit",
+      value: "$15k",
+      icon: <DocumentIcon className="h-6 w-6" />,
+      iconBg: "bg-blue-100 text-blue-600",
+    },
+  ];
   return (
     <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 z-0">
       {cardData.map((card) => (
