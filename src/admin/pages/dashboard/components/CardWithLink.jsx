@@ -8,19 +8,26 @@ import {
 import { useCustomerContext } from "../../../../context/CustomerContext";
 
 export function CardWithLink() {
-  const { totalCustomer } = useCustomerContext();
+  const { totalCustomer, totalBalance, totalDeposit } = useCustomerContext();
+  const formatValue = (value, prefix = "") => {
+    if (value != null) {
+      const formattedValue = new Intl.NumberFormat().format(value);
+      return `${prefix}${formattedValue}`;
+    }
+    return `${prefix}0`;
+  };
   const cardData = [
     {
       id: 1,
-      title: "Budget",
-      value: "$24k",
+      title: " Total Balance",
+      value: formatValue(totalBalance, "$"),
       icon: <CurrencyDollarIcon className="h-6 w-6" />,
       iconBg: "bg-blue-100 text-blue-600",
     },
     {
       id: 2,
       title: "Total Customers",
-      value: totalCustomer ? totalCustomer : "",
+      value: formatValue(totalCustomer),
       icon: <UserGroupIcon className="h-6 w-6" />,
       iconBg: "bg-green-100 text-green-600",
     },
@@ -34,8 +41,8 @@ export function CardWithLink() {
     },
     {
       id: 4,
-      title: "Total Profit",
-      value: "$15k",
+      title: "Total Deposit",
+      value: formatValue(totalDeposit, "$"),
       icon: <DocumentIcon className="h-6 w-6" />,
       iconBg: "bg-blue-100 text-blue-600",
     },

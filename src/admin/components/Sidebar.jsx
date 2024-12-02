@@ -19,7 +19,7 @@ import PeopleIcon from "@mui/icons-material/People";
 import AdminPanelSettingsIcon from "@mui/icons-material/AdminPanelSettings";
 import { Link, useLocation } from "react-router-dom";
 import useLogout from "../../hooks/useLogOut";
-import { menuItems } from "../data/menuItems";
+import { useCustomerContext } from "../../context/CustomerContext";
 
 const iconComponents = {
   PresentationChartBarIcon: (
@@ -33,6 +33,43 @@ const iconComponents = {
 };
 
 export function Sidebar({ isOpen, closeSidebar }) {
+  const { totalCustomer } = useCustomerContext();
+
+  const menuItems = [
+    {
+      to: "/admin/dashboard",
+      label: "Dashboard",
+      icon: "PresentationChartBarIcon",
+    },
+    {
+      to: "/admin/customers",
+      label: "Customers",
+      icon: "PeopleIcon",
+    },
+    {
+      to: "/admin/roles",
+      label: "Roles & Permissions",
+      icon: "AdminPanelSettingsIcon",
+      divider: true, // Indicates an hr should appear after this item
+    },
+    {
+      to: "/admin/inbox",
+      label: "Inbox",
+      icon: "InboxIcon",
+      chip: totalCustomer,
+    },
+    {
+      to: "/admin/profile",
+      label: "Profile",
+      icon: "UserCircleIcon",
+    },
+    {
+      to: "/admin/settings",
+      label: "Settings",
+      icon: "Cog6ToothIcon",
+    },
+  ];
+
   const { pathname } = useLocation(); // Get the current path
   const { handleLogout } = useLogout();
 
@@ -62,7 +99,7 @@ export function Sidebar({ isOpen, closeSidebar }) {
                     <Typography className="mr-auto font-normal text-white">
                       {item.label}
                     </Typography>
-                    {item.chip && (
+                    {(item.chip || item.chip === 0) && (
                       <ListItemSuffix>
                         <Chip
                           value={item.chip}
@@ -70,7 +107,7 @@ export function Sidebar({ isOpen, closeSidebar }) {
                           className="rounded-full text-black bg-white"
                         />
                       </ListItemSuffix>
-                    )}{" "}
+                    )}
                   </ListItem>
                 </Link>
                 {item.divider && <hr className="my-2 border-blue-gray-50" />}

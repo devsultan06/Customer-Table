@@ -13,6 +13,7 @@ import Profile from "./admin/pages/profile/Profile.jsx";
 import Dashboard from "./admin/pages/dashboard/Dashboard.jsx";
 
 const App = () => {
+  
   return (
     <AuthProvider>
       <BrowserRouter>

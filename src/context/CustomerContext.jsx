@@ -10,11 +10,13 @@ export const useCustomerContext = () => {
   return useContext(CustomerContext);
 };
 
-export const CustomerProvider = ({children }) => {
+export const CustomerProvider = ({ children }) => {
   const [customers, setCustomers] = useState([]);
   const [loading, setLoading] = useState(true); // Set loading to true on initial render
 
   const [error, setError] = useState(null);
+  const [totalBalance, setTotalBalance] = useState(0); // State for total balance
+  const [totalDeposit, setTotalDeposit] = useState(0); // State for total deposit
 
   const fetchCustomers = async () => {
     setLoading(true);
@@ -26,6 +28,17 @@ export const CustomerProvider = ({children }) => {
         ...doc.data(),
       }));
       setCustomers(customerData);
+      // Calculate the total balance and deposit
+      const balanceTotal = customerData.reduce(
+        (acc, customer) => acc + (customer.balance || 0),
+        0
+      );
+      const depositTotal = customerData.reduce(
+        (acc, customer) => acc + (customer.deposit || 0),
+        0
+      );
+      setTotalBalance(balanceTotal);
+      setTotalDeposit(depositTotal);
     } catch (err) {
       console.error("Error fetching customers:", err);
       setError("Failed to fetch customers");
@@ -65,6 +78,8 @@ export const CustomerProvider = ({children }) => {
         fetchCustomers,
         error,
         totalCustomer,
+        totalBalance, // Provide total balance
+        totalDeposit, // Provide total deposit
       }}
     >
       {children}

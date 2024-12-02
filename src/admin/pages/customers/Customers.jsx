@@ -3,6 +3,7 @@ import { Button, Input } from "@material-tailwind/react"; // Import Material Tai
 import { ColorRing } from "react-loader-spinner";
 import useExportToExcel from "../../../home/hooks/useExportToExcel";
 import { useCustomerContext } from "../../../context/CustomerContext";
+import AlertMessage from "../../../home/components/AlertMessage";
 
 const Customers = () => {
   const [search, setSearch] = useState(""); // Search term state
@@ -11,11 +12,16 @@ const Customers = () => {
   const filteredCustomers = customers.filter((customer) =>
     customer.name.toLowerCase().includes(search.toLowerCase())
   );
+  const [alert, setAlert] = useState({
+    severity: "",
+    message: "",
+    open: false,
+  });
 
-  const exportToExcel = useExportToExcel(customers);
+  const exportToExcel = useExportToExcel(customers, setAlert);
 
   return (
-    <div className="min-h-screen overflow-y-hidden">
+    <div className="min-h-screen ">
       {/* Header Section */}
       <div className="block md:flex justify-between items-center mb-4">
         <h1 className="text-2xl font-semibold text-gray-700">Customers</h1>
@@ -29,7 +35,6 @@ const Customers = () => {
           </Button>
         </div>
       </div>
-
       {/* Search Bar */}
       <div className="mb-4">
         <Input
@@ -39,7 +44,6 @@ const Customers = () => {
           className="w-full"
         />
       </div>
-
       {/* Loading Spinner */}
       {loading && (
         <div className="text-center mx-auto flex justify-center items-center h-40">
@@ -54,17 +58,15 @@ const Customers = () => {
           />
         </div>
       )}
-
       {/* No Data Message */}
       {!loading && filteredCustomers.length === 0 && (
         <div className="text-center text-gray-600 mt-6">
-          No customers found.
+          No data available in the database.{" "}
         </div>
       )}
-
       {/* Customer Table */}
       {!loading && filteredCustomers.length > 0 && (
-        <div className="bg-white shadow-md rounded-lg overflow-x-auto">
+        <div className="bg-white shadow-md rounded-lg overflow-x-auto max-w-full">
           <table className="min-w-full">
             <thead>
               <tr className="bg-gray-100">
@@ -90,9 +92,9 @@ const Customers = () => {
                   <td className="p-4">{customer.name}</td>
                   <td className="p-4">{customer.description}</td>
                   <td className="p-4">{customer.status}</td>
-                  <td className="p-4">{customer.rate}</td>
-                  <td className="p-4">{customer.balance}</td>
-                  <td className="p-4">{customer.deposit}</td>
+                  <td className="p-4">${customer.rate}</td>
+                  <td className="p-4">${customer.balance}</td>
+                  <td className="p-4">${customer.deposit}</td>
                   <td className="p-4">{customer.createdOn}</td>
                   <td className="p-4">{customer.createdBy}</td>
                 </tr>
@@ -101,6 +103,7 @@ const Customers = () => {
           </table>
         </div>
       )}
+      <AlertMessage alert={alert} setAlert={setAlert} />{" "}
     </div>
   );
 };

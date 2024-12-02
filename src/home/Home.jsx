@@ -22,7 +22,7 @@ import AddIcon from "@mui/icons-material/Add";
 import { visuallyHidden } from "@mui/utils";
 import { db } from "../firebase/config/index";
 import { ColorRing } from "react-loader-spinner";
-import AlertMessage from "./components/MessageBox";
+import AlertMessage from "./components/AlertMessage";
 import { deleteDoc, doc } from "firebase/firestore";
 import useExportToExcel from "./hooks/useExportToExcel";
 import ActionMenu from "./components/ActionMenu";
@@ -117,7 +117,6 @@ export default function Home() {
   });
 
   const currentUser = useCurrentUser();
-
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;

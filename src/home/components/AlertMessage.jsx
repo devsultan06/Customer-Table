@@ -1,7 +1,7 @@
 import React, { useEffect } from "react";
 import { Snackbar, Alert } from "@mui/material";
 
-const MessageBox = ({ alert, setAlert }) => {
+const AlertMessage = ({ alert, setAlert }) => {
   const handleClose = () => {
     setAlert((prev) => ({ ...prev, open: false }));
   };
@@ -30,4 +30,4 @@ const MessageBox = ({ alert, setAlert }) => {
   );
 };
 
-export default MessageBox;
+export default AlertMessage;
