@@ -102,7 +102,7 @@ const Profile = () => {
                 fullWidth
               />
               <TextField
-                label="City"
+                label="City" 
                 variant="outlined"
                 name="city"
                 value={profile.city}

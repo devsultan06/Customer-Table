@@ -13,7 +13,6 @@ import Profile from "./admin/pages/profile/Profile.jsx";
 import Dashboard from "./admin/pages/dashboard/Dashboard.jsx";
 
 const App = () => {
-  
   return (
     <AuthProvider>
       <BrowserRouter>
@@ -28,6 +27,7 @@ const App = () => {
               </ProtectedRoute>
             }
           />
+          <Route path="/admin/" element={<Navigate to="/admin" replace />} />
           <Route
             path="/admin"
             element={
