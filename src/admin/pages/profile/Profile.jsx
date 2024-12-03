@@ -26,7 +26,7 @@ const Profile = () => {
   return (
     <div className="flex flex-col md:flex-row">
       {/* Profile Content */}
-      <div className="flex-1 p-6 md:p-12">
+      <div className="flex-1">
         <div className="flex flex-col items-center mb-6 md:mb-12">
           <Avatar
             src="https://via.placeholder.com/150"

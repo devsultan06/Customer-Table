@@ -9,7 +9,7 @@ import {
 
 const Settings = () => {
   return (
-    <div className="flex flex-col items-center px-4 py-8 sm:px-8 md:px-16 lg:px-32">
+    <div className="flex flex-col items-center">
       <h1 className="text-2xl font-bold text-blue-gray-800 mb-6">Settings</h1>
 
       {/* Profile Settings */}
