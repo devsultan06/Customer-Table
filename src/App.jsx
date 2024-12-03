@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import Authentication from "./auth/auth";
 import Home from "./home/Home.jsx";
@@ -11,8 +11,16 @@ import Settings from "./admin/pages/settings/Settings.jsx";
 import Inbox from "./admin/pages/inbox/Inbox.jsx";
 import Profile from "./admin/pages/profile/Profile.jsx";
 import Dashboard from "./admin/pages/dashboard/Dashboard.jsx";
+import { generateToken, messaging } from "./firebase/config/index.js";
+import { onMessage } from "firebase/messaging";
 
 const App = () => {
+  useEffect(() => {
+    generateToken();
+    onMessage(messaging, (payload) => {
+      console.log("Message received. ", payload);
+    });
+  }, []);
   return (
     <AuthProvider>
       <BrowserRouter>

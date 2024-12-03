@@ -12,7 +12,7 @@ const AuthProvider = ({ children }) => {
   const [loading, setLoading] = useState(true); // Set loading to true on initial render	
 
   useEffect(() => {
-    const unsubscribe = onAuthStateChanged(auth, (user) => {
+    const subscribe = onAuthStateChanged(auth, (user) => {
       if (user) {
         setCurrentUser({
           email: user.email,
@@ -24,7 +24,7 @@ const AuthProvider = ({ children }) => {
     });
 
     // Cleanup subscription on unmount
-    return () => unsubscribe();
+    return () => subscribe();
   }, []);
 
   if (loading) {

@@ -7,7 +7,7 @@ import AlertMessage from "../../../home/components/AlertMessage";
 
 const Customers = () => {
   const [search, setSearch] = useState(""); // Search term state
-  const { customers, loading } = useCustomerContext();
+  const { customers} = useCustomerContext();
   // Filter customers based on the search term
   const filteredCustomers = customers.filter((customer) =>
     customer.name.toLowerCase().includes(search.toLowerCase())
@@ -44,28 +44,15 @@ const Customers = () => {
           className="w-full"
         />
       </div>
-      {/* Loading Spinner */}
-      {loading && (
-        <div className="text-center mx-auto flex justify-center items-center h-40">
-          <ColorRing
-            visible={true}
-            height="80"
-            width="80"
-            ariaLabel="color-ring-loading"
-            wrapperStyle={{}}
-            wrapperClass="color-ring-wrapper"
-            colors={["#316bf3", "#316bf3", "#316bf3", "#316bf3", "#316bf3"]}
-          />
-        </div>
-      )}
+   
       {/* No Data Message */}
-      {!loading && filteredCustomers.length === 0 && (
+      {filteredCustomers.length === 0 && (
         <div className="text-center text-gray-600 mt-6">
           No data available in the database.{" "}
         </div>
       )}
       {/* Customer Table */}
-      {!loading && filteredCustomers.length > 0 && (
+      {filteredCustomers.length > 0 && (
         <div className="bg-white shadow-md rounded-lg overflow-x-auto max-w-full">
           <table className="min-w-full">
             <thead>
