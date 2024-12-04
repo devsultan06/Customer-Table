@@ -3,6 +3,7 @@ import { addDoc, collection } from "firebase/firestore";
 import { db } from "../../firebase/config/index";
 import { useContext } from "react";
 import { AuthContext } from "../../context/AuthContext";
+import { query, where, getDocs } from "firebase/firestore";
 
 const useSaveCustomer = (
   newCustomer,
@@ -21,6 +22,24 @@ const useSaveCustomer = (
     const formattedDate = currentDate.toLocaleDateString();
     const createdBy = currentUser.email;
     try {
+      // Check if a customer with the same name already exists in the database
+      const q = query(
+        collection(db, "customers"),
+        where("name", "==", newCustomer.name)
+      );
+      const querySnapshot = await getDocs(q);
+
+      if (!querySnapshot.empty) {
+        // If the name already exists, show an error
+        setAlert({
+          severity: "error",
+          message: "A customer with this name already exists.",
+          open: true,
+        });
+        setLoading(false);
+        return; // Stop further execution if the customer already exists
+      }
+
       const customerToSave = {
         ...newCustomer,
         createdOn: formattedDate,
@@ -45,7 +64,7 @@ const useSaveCustomer = (
         balance: "",
         deposit: "",
       });
- 
+
       handleCloseAddStaffModal();
       fetchCustomers();
 

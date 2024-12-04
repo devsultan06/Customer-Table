@@ -1,6 +1,14 @@
 //useUpdateCustomer.js
-import { doc, serverTimestamp, updateDoc } from "firebase/firestore";
-import { db } from "../../firebase/config/index"; 
+import {
+  doc,
+  serverTimestamp,
+  updateDoc,
+  query,
+  where,
+  getDocs,
+  collection,
+} from "firebase/firestore";
+import { db } from "../../firebase/config/index";
 
 const useUpdateCustomer = (
   setLoading,
@@ -18,6 +26,22 @@ const useUpdateCustomer = (
       return;
     }
 
+    // Check if another customer with the same name exists (excluding the current customer)
+    const q = query(collection(db, "customers"), where("name", "==", name));
+    const querySnapshot = await getDocs(q);
+
+    // Ensure that the customer with the same name is not the current one
+    const existingCustomer = querySnapshot.docs.find((doc) => doc.id !== id);
+
+    if (existingCustomer) {
+      setAlert({
+        severity: "error",
+        message: "A customer with this name already exists.",
+        open: true,
+      });
+      setLoading(false);
+      return; // Stop further execution if the name already exists
+    }
     const docRef = doc(db, "customers", id);
 
     try {
