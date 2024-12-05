@@ -1,6 +1,8 @@
-import { initializeApp } from "firebase/app";
-import { getMessaging, onBackgroundMessage } from "firebase/messaging/sw";
-import { messaging } from "../src/firebase/config/index";
+// Import scripts for Firebase Messaging
+importScripts("https://www.gstatic.com/firebasejs/9.25.0/firebase-app.js");
+importScripts(
+  "https://www.gstatic.com/firebasejs/9.25.0/firebase-messaging.js"
+);
 
 // Initialize the Firebase app in the service worker by passing in
 // your app's Firebase config object.
