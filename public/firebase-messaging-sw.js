@@ -1,6 +1,6 @@
 import { initializeApp } from "firebase/app";
 import { getMessaging, onBackgroundMessage } from "firebase/messaging/sw";
-import { messaging } from "./index";
+import { messaging } from "../src/firebase/config/index";
 
 // Initialize the Firebase app in the service worker by passing in
 // your app's Firebase config object.
