@@ -30,12 +30,31 @@ export const messaging = getMessaging(app);
 // };
 
 export const generateToken = async () => {
+  // Check if permission is already granted
   const permission = await Notification.requestPermission();
-  console.log(permission);
-  if (permission === "granted") {
+  if (permission !== "granted") {
+    console.log("Notification permission not granted.");
+    return;
+  }
+
+  // Check if token is already stored
+  const existingToken = localStorage.getItem("fcmToken");
+  if (existingToken) {
+    console.log("Using cached token:", existingToken);
+    return existingToken;
+  }
+
+  // Generate a new token
+  try {
     const token = await getToken(messaging, {
       vapidKey: import.meta.env.VITE_FIREBASE_VAPID_KEY,
     });
-    console.log("Token:", token);
+    if (token) {
+      console.log("Generated token:", token);
+      localStorage.setItem("fcmToken", token); // Cache the token
+      return token;
+    }
+  } catch (error) {
+    console.error("Error generating token:", error);
   }
 };

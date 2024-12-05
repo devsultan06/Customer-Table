@@ -1,26 +1,31 @@
-// Import scripts for Firebase Messaging
-importScripts("https://www.gstatic.com/firebasejs/9.25.0/firebase-app.js");
+// Give the service worker access to Firebase Messaging.
+// Note that you can only use Firebase Messaging here. Other Firebase libraries
+// are not available in the service worker.
+// Replace 10.13.2 with latest version of the Firebase JS SDK.
 importScripts(
-  "https://www.gstatic.com/firebasejs/9.25.0/firebase-messaging.js"
+  "https://www.gstatic.com/firebasejs/10.13.2/firebase-app-compat.js"
 );
-
+importScripts(
+  "https://www.gstatic.com/firebasejs/10.13.2/firebase-messaging-compat.js"
+);
 // Initialize the Firebase app in the service worker by passing in
 // your app's Firebase config object.
 // https://firebase.google.com/docs/web/setup#config-object
-const firebaseApp = initializeApp({
-  apiKey: import.meta.env.VITE_FIREBASE_API_KEY,
-  authDomain: import.meta.env.VITE_FIREBASE_AUTH_DOMAIN,
-  projectId: import.meta.env.VITE_FIREBASE_PROJECT_ID,
-  storageBucket: import.meta.env.VITE_FIREBASE_STORAGE_BUCKET,
-  messagingSenderId: import.meta.env.VITE_FIREBASE_MESSAGING_SENDER_ID,
-  appId: import.meta.env.VITE_FIREBASE_APP_ID,
-  measurementId: import.meta.env.VITE_FIREBASE_MEASUREMENT_ID,
+firebase.initializeApp({
+  apiKey: "AIzaSyCY48C54J36Q7-yB7RrXCOEEx67XvYO4W4",
+  authDomain: "customer-table-3ae24.firebaseapp.com",
+  projectId: "customer-table-3ae24",
+  storageBucket: "customer-table-3ae24.firebasestorage.app",
+  messagingSenderId: "748510172849",
+  appId: "1:748510172849:web:7c3915d391a820933d7490",
+  measurementId: "G-89B2KTC31K",
 });
 
 // Retrieve an instance of Firebase Messaging so that it can handle background
 // messages.
-const messaging = getMessaging(firebaseApp);
-onBackgroundMessage(messaging, (payload) => {
+const messaging = firebase.messaging();
+
+messaging.onBackgroundMessage((payload) => {
   console.log(
     "[firebase-messaging-sw.js] Received background message ",
     payload
