@@ -11,7 +11,7 @@ import Settings from "./admin/pages/settings/Settings.jsx";
 import Inbox from "./admin/pages/inbox/Inbox.jsx";
 import Profile from "./admin/pages/profile/Profile.jsx";
 import Dashboard from "./admin/pages/dashboard/Dashboard.jsx";
-import { generateToken, messaging } from "./firebase/config/index.js";
+import {generateToken, messaging } from "./firebase/config/index.js";
 import { onMessage } from "firebase/messaging";
 
 const App = () => {
