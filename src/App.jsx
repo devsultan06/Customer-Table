@@ -1,4 +1,3 @@
-import React, { useEffect } from "react";
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import Authentication from "./auth/auth";
 import Home from "./home/Home.jsx";
@@ -11,35 +10,8 @@ import Settings from "./admin/pages/settings/Settings.jsx";
 import Inbox from "./admin/pages/inbox/Inbox.jsx";
 import Profile from "./admin/pages/profile/Profile.jsx";
 import Dashboard from "./admin/pages/dashboard/Dashboard.jsx";
-import {generateToken, messaging } from "./firebase/config/index.js";
-import { onMessage } from "firebase/messaging";
 
 const App = () => {
-  useEffect(() => {
-    // Ensure the service worker is registered
-    if ("serviceWorker" in navigator) {
-      navigator.serviceWorker
-        .register("/firebase-messaging-sw.js") // Make sure this path is correct
-        .then((registration) => {
-          console.log(
-            "Service Worker registered with scope:",
-            registration.scope
-          );
-        })
-        .catch((error) => {
-          console.error("Service Worker registration failed:", error);
-        });
-    }
-
-    // Request token and listen for push messages
-    generateToken(); // Ensure this function requests permission and gets the token
-
-    // Handle incoming messages when the app is in the foreground
-    onMessage(messaging, (payload) => {
-      console.log("Message received: ", payload);
-    });
-  }, []);
-
   return (
     <AuthProvider>
       <BrowserRouter>
