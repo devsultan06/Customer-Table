@@ -13,7 +13,6 @@ dist-ssr
 *.local
 *.env
 .firebase/
-.github/secrets/
 
 
 
