@@ -12,6 +12,9 @@ dist
 dist-ssr
 *.local
 *.env
+.firebase/
+.github/secrets/
+
 
 
 # Editor directories and files
