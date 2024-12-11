@@ -1,7 +1,7 @@
 //CustomerContext.js
 import React, { createContext, useState, useEffect, useContext } from "react";
 import { collection, getDocs } from "firebase/firestore";
-import { db } from "../firebase/config";
+import { db } from "../../firebase/config";
 import { ColorRing } from "react-loader-spinner";
 
 const CustomerContext = createContext();

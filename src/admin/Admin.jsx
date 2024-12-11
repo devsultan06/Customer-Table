@@ -3,7 +3,7 @@ import { Sidebar } from "./components/Sidebar";
 import { ComplexNavbar } from "./components/Navbar";
 import { Outlet } from "react-router-dom";
 
-import { CustomerProvider } from "../context/CustomerContext";
+import { CustomerProvider } from "./contexts/CustomerContext";
 const Admin = () => {
   const [isOpen, setIsOpen] = useState(false);
 

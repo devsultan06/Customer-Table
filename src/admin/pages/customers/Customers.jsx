@@ -2,7 +2,7 @@ import { useState } from "react";
 import { Button, Input } from "@material-tailwind/react"; // Import Material Tailwind components
 import { ColorRing } from "react-loader-spinner";
 import useExportToExcel from "../../../home/hooks/useExportToExcel";
-import { useCustomerContext } from "../../../context/CustomerContext";
+import { useCustomerContext } from "../../contexts/CustomerContext";
 import AlertMessage from "../../../home/components/AlertMessage";
 
 const Customers = () => {

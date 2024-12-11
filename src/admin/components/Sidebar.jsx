@@ -19,7 +19,7 @@ import PeopleIcon from "@mui/icons-material/People";
 import AdminPanelSettingsIcon from "@mui/icons-material/AdminPanelSettings";
 import { Link, useLocation } from "react-router-dom";
 import useLogout from "../../hooks/useLogOut";
-import { useCustomerContext } from "../../context/CustomerContext";
+import { useCustomerContext } from "../contexts/CustomerContext";
 
 const iconComponents = {
   PresentationChartBarIcon: (

@@ -1,5 +1,5 @@
 import React from "react";
-import { useCustomerContext } from "../../../context/CustomerContext";
+import { useCustomerContext } from "../../contexts/CustomerContext";
 
 const Inbox = () => {
   const { newCustomer} = useCustomerContext(); // Get the new customers from context

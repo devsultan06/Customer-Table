@@ -5,7 +5,7 @@ import {
   DocumentIcon,
   ListBulletIcon,
 } from "@heroicons/react/24/solid";
-import { useCustomerContext } from "../../../../context/CustomerContext";
+import { useCustomerContext } from "../../../contexts/CustomerContext";
 
 export function CardWithLink() {
   const { totalCustomer, totalBalance, totalDeposit } = useCustomerContext();
