@@ -10,9 +10,9 @@ const Theme = () => {
     <div className="fixed top-[30px] right-[50px]">
       <IconButton onClick={toggleTheme} aria-label="Toggle theme">
         {theme === "dark" ? (
-          <LightMode className="text-white" /> // Dark mode icon
+          <LightMode className="text-white" /> 
         ) : (
-          <Brightness4 className="text-black" /> // Light mode icon
+          <Brightness4 className="text-black" /> 
         )}
       </IconButton>
     </div>

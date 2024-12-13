@@ -12,7 +12,7 @@ export const useCustomerContext = () => {
 
 export const CustomerProvider = ({ children }) => {
   const [customers, setCustomers] = useState([]);
-  const [loading, setLoading] = useState(true); // Set loading to true on initial render
+  const [loading, setLoading] = useState(true); 
 
   const [error, setError] = useState(null);
   const [totalBalance, setTotalBalance] = useState(0); // State for total balance
@@ -78,8 +78,8 @@ export const CustomerProvider = ({ children }) => {
         fetchCustomers,
         error,
         totalCustomer,
-        totalBalance, // Provide total balance
-        totalDeposit, // Provide total deposit
+        totalBalance, 
+        totalDeposit, 
       }}
     >
       {children}

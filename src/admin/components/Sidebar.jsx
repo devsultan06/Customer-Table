@@ -70,7 +70,7 @@ export function Sidebar({ isOpen, closeSidebar }) {
     },
   ];
 
-  const { pathname } = useLocation(); // Get the current path
+  const { pathname } = useLocation(); 
   const { handleLogout } = useLogout();
 
   const isActive = (path) => pathname === path;

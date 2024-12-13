@@ -17,7 +17,6 @@ const Admin = () => {
           toggleSidebar={toggleSidebar}
           closeSidebar={closeSidebar}
         />
-        {/* Content Area */}
         <div className="flex-1 ">
           <ComplexNavbar
             isOpen={isOpen}
@@ -25,7 +24,6 @@ const Admin = () => {
             closeSidebar={closeSidebar}
           />
 
-          {/* Full-width line */}
           <hr className="my-2 border-blue-gray-200 w-full mt-[55px] fixed" />
           <div className="content ml-[0px] mt-[100px] md:ml-[300px] px-[20px] w-[auto]">
             <Outlet />{" "}

@@ -1,7 +1,7 @@
 // useFetchCustomers.js
 import { useState } from "react";
 import { collection, getDocs } from "firebase/firestore";
-import { db } from "../../firebase/config/index"; // Adjust this import to your Firebase setup
+import { db } from "../../firebase/config/index"; 
 
 const useFetchCustomers = (setLoading, setAlert) => {
   const [customers, setCustomers] = useState([]);
@@ -21,7 +21,7 @@ const useFetchCustomers = (setLoading, setAlert) => {
         message: `Error fetching data: ${err.message}`,
         open: true,
       });
-      setCustomers([]); // Ensure no data remains when there's an error
+      setCustomers([]); 
     } finally {
       setLoading(false);
     }

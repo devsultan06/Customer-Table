@@ -239,14 +239,13 @@ export default function Home() {
         message: "Customer deleted successfully!",
         open: true,
       });
-      fetchCustomers(); // fetches the updated list of customers
+      fetchCustomers();
     } catch (error) {
       console.error("Error deleting customer:", error);
     } finally {
       setLoading(false);
     }
 
-    // Close the menu after handling the action
     handleMenuClose();
     handleCloseDeleteModal();
   };
@@ -335,7 +334,6 @@ export default function Home() {
                   </TableCell>
                 </TableRow>
               ) : searchQuery && filteredCustomers.length === 0 ? (
-                // Show "No results found" when a search query has no matches
                 <TableRow>
                   <TableCell colSpan={headCells.length + 1} align="center">
                     <Typography>
@@ -352,8 +350,8 @@ export default function Home() {
                 </TableRow>
               ) : (
                 filteredCustomers
-                  .sort(getComparator(order, orderBy)) // Sort the full data set
-                  .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage) // Paginate the data
+                  .sort(getComparator(order, orderBy))
+                  .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                   .map((customer, index) => (
                     <TableRow
                       hover
@@ -459,6 +457,7 @@ export default function Home() {
         newCustomer={newCustomer}
         handleInputChange={handleInputChange}
       />
+      {/* Modal for Editing Customer */}
       <EditStaffModal
         open={editmodalOpen}
         handleClose={handleCloseEditModal}
@@ -467,12 +466,14 @@ export default function Home() {
         handleEdit={handleEdit}
         selectedCustomer={selectedCustomer}
       />
+      {/* Modal for Viewing Customer */}
       <ViewModal
         open={viewmodalOpen}
         handleClose={handleCloseViewModal}
         handleCloseModal={handleCloseViewModal}
         selectedCustomer={selectedCustomer}
       />
+      {/* Modal for Confirm Delete Customer */}
       <ConfirmDeleteModal
         open={deleteModal}
         onClose={handleCloseDeleteModal}
@@ -480,6 +481,7 @@ export default function Home() {
         customerName={selectedCustomer?.name}
         loading={loading}
       />
+      {/* Alert Message */}
       <AlertMessage alert={alert} setAlert={setAlert} />{" "}
     </Box>
   );

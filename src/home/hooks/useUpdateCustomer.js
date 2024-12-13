@@ -56,7 +56,7 @@ const useUpdateCustomer = (
         message: "Customer updated successfully!",
         open: true,
       });
-      fetchCustomers(); // Refresh the customer list
+      fetchCustomers(); 
     } catch (error) {
       console.error("Error updating customer:", error);
       setAlert({
@@ -66,8 +66,8 @@ const useUpdateCustomer = (
       });
     } finally {
       setLoading(false);
-      handleCloseEditModal(); // Close the edit modal
-      handleMenuClose(); // Close the menu
+      handleCloseEditModal(); 
+      handleMenuClose(); 
     }
   };
 

@@ -12,7 +12,7 @@ const AlertMessage = ({ alert, setAlert }) => {
         handleClose();
       }, 3000);
       return () => {
-        clearTimeout(timer); // Clean up timer on component unmount
+        clearTimeout(timer); 
       };
     }
   }, [alert.open]);

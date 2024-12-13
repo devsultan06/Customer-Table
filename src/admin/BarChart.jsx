@@ -62,7 +62,7 @@ const data = {
 const BarChart = () => {
   const options = {
     responsive: true,
-    maintainAspectRatio: false, // Allow the chart to resize dynamically
+    maintainAspectRatio: false, 
     plugins: {
       legend: {
         display: false,

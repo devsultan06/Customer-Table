@@ -8,8 +8,8 @@ const useLogout = () => {
 
   const handleLogout = async () => {
     try {
-      await signOut(auth); // Log the user out of Firebase
-      navigate("/auth"); // Redirect to auth page after logging out
+      await signOut(auth); 
+      navigate("/auth"); 
     } catch (error) {
       console.error("Error logging out: ", error); 
     }

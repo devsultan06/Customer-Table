@@ -22,12 +22,10 @@ function AddStaffModal({
   newCustomer,
 }) {
   const isFormValid = useMemo(() => {
-    // Check if all fields are filled
     const allFieldsFilled = Object.values(newCustomer).every(
       (value) => value.toString().trim() !== ""
     );
 
-    // Check if numerical fields (rate, balance, deposit) are non-negative
     const noNegativeValues =
       newCustomer.rate >= 0 &&
       newCustomer.balance >= 0 &&

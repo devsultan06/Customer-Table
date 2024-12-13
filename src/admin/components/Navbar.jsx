@@ -38,14 +38,12 @@ export function ComplexNavbar({ isOpen, toggleSidebar, closeSidebar }) {
             onClick={handleToggleSidebar}
           />
         </div>
-        {/* Overlay */}
         {isOpen && isSmallScreen && (
           <div
             className="fixed inset-0 z-[60px] bg-black bg-opacity-50"
             onClick={closeSidebar}
           />
         )}
-        {/* Profile Menu - aligned to the right */}
         <div className="flex items-center ml-auto">
           <ProfileMenu />
         </div>{" "}

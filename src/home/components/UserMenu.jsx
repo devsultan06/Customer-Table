@@ -27,7 +27,7 @@ export default function UserMenu({ email, handleLogout }) {
       <IconButton
         onClick={handleClick}
         sx={{
-          color: "black", // Adjust the color based on your theme
+          color: "black", 
           marginRight: "2px",
         }}
       >
@@ -50,7 +50,7 @@ export default function UserMenu({ email, handleLogout }) {
         <MenuItem
           disabled
           sx={{
-            color: "black", // Adjust the color based on your theme
+            color: "black", 
           }}
         >
           {email}

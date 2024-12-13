@@ -9,9 +9,10 @@ const AuthContext = createContext();
 // Create a provider component
 const AuthProvider = ({ children }) => {
   const [currentUser, setCurrentUser] = useState(null);
-  const [loading, setLoading] = useState(true); // Set loading to true on initial render	
+  const [loading, setLoading] = useState(false); // Set loading to true on initial render	
 
   useEffect(() => {
+    setLoading(true)
     const subscribe = onAuthStateChanged(auth, (user) => {
       if (user) {
         setCurrentUser({

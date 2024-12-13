@@ -71,7 +71,7 @@ function EditStaffModal({
   const handleSubmit = () => {
     if (!selectedCustomer || !selectedCustomer.id) {
       console.error("Selected customer is invalid or does not have an ID");
-      return; // Prevent further execution if selectedCustomer is invalid
+      return; 
     }
     handleEdit({ ...formValues, id: selectedCustomer.id });
   };
