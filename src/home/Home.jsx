@@ -269,7 +269,7 @@ export default function Home() {
               Customer Table
             </Typography>
           </Toolbar>
-          <UserMenu handleLogout={handleLogout} email={currentUser.email} />
+          <UserMenu handleLogout={handleLogout} email={currentUser} />
         </div>
         <div className="flex flex-col sm:flex-row justify-between items-center w-full">
           <TextField
