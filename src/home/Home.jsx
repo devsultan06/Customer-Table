@@ -214,7 +214,7 @@ export default function Home() {
     handleCloseAddStaffModal
   );
 
-  const handleLogout  = useLogout();
+  const {handleLogout}  = useLogout();
 
   const handleDelete = async () => {
     console.log(`Delete clicked for customer`, selectedCustomer);
