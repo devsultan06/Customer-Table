@@ -8,14 +8,14 @@ const useLogout = () => {
 
   const handleLogout = async () => {
     try {
-      await signOut(auth); 
-      navigate("/auth"); 
+      await signOut(auth);
+      navigate("/auth");
     } catch (error) {
-      console.error("Error logging out: ", error); 
+      console.error("Error logging out: ", error);
     }
   };
- 
-  return { handleLogout };
+
+  return handleLogout;
 };
 
 export default useLogout;

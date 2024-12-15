@@ -116,9 +116,7 @@ export default function Home() {
     deposit: "",
   });
 
-  const {currentUser} = useCurrentUser();
-
-  console.log(currentUser);
+  const currentUser = useCurrentUser();
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -216,7 +214,7 @@ export default function Home() {
     handleCloseAddStaffModal
   );
 
-  const { handleLogout } = useLogout();
+  const handleLogout  = useLogout();
 
   const handleDelete = async () => {
     console.log(`Delete clicked for customer`, selectedCustomer);
@@ -271,7 +269,7 @@ export default function Home() {
               Customer Table
             </Typography>
           </Toolbar>
-          <UserMenu handleLogout={handleLogout} email={currentUser} />
+          <UserMenu handleLogout={handleLogout} email={currentUser.email} />
         </div>
         <div className="flex flex-col sm:flex-row justify-between items-center w-full">
           <TextField

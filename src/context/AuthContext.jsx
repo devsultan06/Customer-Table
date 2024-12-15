@@ -15,7 +15,10 @@ const AuthProvider = ({ children }) => {
     setLoading(true);
     const subscribe = onAuthStateChanged(auth, (user) => {
       if (user) {
-        setCurrentUser(user.email);
+        setCurrentUser({
+          email: user.email,
+          uid: user.uid,
+        });
       } else {
         setCurrentUser(null);
       }
