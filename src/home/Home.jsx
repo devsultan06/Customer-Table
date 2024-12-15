@@ -116,7 +116,9 @@ export default function Home() {
     deposit: "",
   });
 
-  const currentUser = useCurrentUser();
+  const {currentUser} = useCurrentUser();
+
+  console.log(currentUser);
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
